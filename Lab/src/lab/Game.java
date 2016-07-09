@@ -23,7 +23,7 @@ public class Game extends JPanel{
 		marginSize = (int) Math.ceil(tileSize / 20);
 		
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.BLACK);	
+		g2d.setColor(Color.decode("#333333"));	
 		// must kast
 		g2d.fillRect(0, (getHeight()-getWidth())/2, getWidth(), getWidth());
 		// ülemine kast
