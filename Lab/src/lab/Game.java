@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.Console;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,16 +17,20 @@ public class Game extends JPanel{
 	private int j;
 	private String player1 = "#588C7E";
 	private String player2 = "#8C4646";
+	public String player1color = "#6677AA";
+	public String player2color = "#AA7766";
 	private String gridcolor = "#F2AE72";
 	private String gridbackgroundcolor ="#D96479";
-	private int tileSize;  //tile size: getWidth() / 9.45
+	public int tileSize;  //tile size: getWidth() / 9.45
 	private int marginSize; //margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
-	Player Player1 = new Player(this);
-	Player Player2 = new Player(this);
+	Player Player1 = new Player(this, 1);
+	Player Player2 = new Player(this, 2);
+	
+	static Mouse mml = new Mouse();
 
 	public void paint(Graphics g) {
-
+		System.out.println(Player1.x);
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
 		marginSize = (int) Math.ceil(tileSize / 20);
 		
@@ -50,9 +56,12 @@ public class Game extends JPanel{
 		Player1.paint(g2d);
 		Player2.paint(g2d);
 	}
+
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Labyrinth cancer game");
+
+		frame.addMouseListener(mml);
 		frame.add(new Game());
 		frame.setSize(376, 616);
 		frame.setVisible(true);
