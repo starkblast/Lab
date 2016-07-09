@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
+import java.io.Console;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -13,19 +15,28 @@ public class Game extends JPanel{
 	private int j;
 	private String player1 = "#330000";
 	private String player2 = "#003300";
-			
+	private int tileSize;  //tile size: getWidth() / 9.45
+	private int marginSize; //margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	public void paint(Graphics g) {
+
+		tileSize =  (int) Math.ceil(getWidth() / 9.45);
+		marginSize = (int) Math.ceil(tileSize / 20);
+		
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.BLACK);	
-		g2d.fillRect(0, 120, 376, 376);
+		// must kast
+		g2d.fillRect(0, (getHeight()-getWidth())/2, getWidth(), getWidth());
+		// ülemine kast
 		g2d.setColor(Color.decode(player1));
-		g2d.fillRect(0, 0, 376, 120);
+		g2d.fillRect(0, 0, getWidth(), (getHeight()-getWidth())/2);
+		// alumine kast
 		g2d.setColor(Color.decode(player2));
-		g2d.fillRect(0, 496, 376, 120);
+		g2d.fillRect(0, (getHeight()-getWidth())/2+getWidth(), getWidth(), (getHeight()-getWidth())/2);
+		
 		g2d.setColor(Color.GRAY);
 		for (i=0; i<9 ;i++) {
 			for (j=0; j<9 ;j++) {
-				g2d.fillRect(j*40 + j*2, 120 + i*40 + i*2, 40, 40);
+				g2d.fillRect(j*tileSize + j*marginSize, (getHeight()-getWidth())/2 + i*tileSize + i*marginSize, tileSize, tileSize);
 			}
 		}
 	}
@@ -36,7 +47,7 @@ public class Game extends JPanel{
 		frame.setSize(376, 616);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setBackground(Color.WHITE);
+		frame.getContentPane().setBackground(Color.BLACK);
 	
 	}
 }
