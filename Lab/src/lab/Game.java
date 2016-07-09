@@ -17,6 +17,10 @@ public class Game extends JPanel{
 	private String player2 = "#003300";
 	private int tileSize;  //tile size: getWidth() / 9.45
 	private int marginSize; //margin size: (getWidth() - (getWidth() / 9.45)) / 8
+	
+	Player Player1 = new Player(this);
+	Player Player2 = new Player(this);
+
 	public void paint(Graphics g) {
 
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
@@ -39,6 +43,10 @@ public class Game extends JPanel{
 				g2d.fillRect(j*tileSize + j*marginSize, (getHeight()-getWidth())/2 + i*tileSize + i*marginSize, tileSize, tileSize);
 			}
 		}
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		Player1.paint(g2d);
+		Player2.paint(g2d);
 	}
 	
 	public static void main(String[] args) {
