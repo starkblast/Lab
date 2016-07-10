@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import java.awt.Rectangle;
 
 public class Player {
 	int x = 0;
@@ -34,6 +34,9 @@ public class Player {
 	
 	void displayHighlights () {
 		
+		/*if (y>=(game.getHeight()-game.getWidth())/2) { 
+			game.highlightupw = 0;
+		}*/
 	}
 
 	public void paint(Graphics2D g) {
@@ -41,6 +44,9 @@ public class Player {
 			if (i == 1) {
 				y = ((game.getHeight()-game.getWidth())/2 + 5);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
+				if (y>=(game.getHeight()-game.getWidth())/2) { 
+					game.highlightupw = 0;
+				}
 			} else {
 				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5;
 				x = game.getWidth() /2- (game.tileSize-10)/2;
@@ -58,4 +64,17 @@ public class Player {
 		}
 		g.fillOval(x, y, game.tileSize-10, game.tileSize-10);
 	}
+	
+	/*public boolean collision() {
+		return getBounds().intersects(game.getBounds());
+		
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, game.tileSize, game.tileSize);
+	}*/
+	
+	//(getHeight()-getWidth())/2)
+	
+	
 }
