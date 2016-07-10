@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
@@ -33,7 +34,7 @@ public class Game extends JPanel{
 	public int highlightupw2;
 	public int highlightups1;
 	public int highlightups2;
-	public ArrayList<String> moves;
+	public ArrayList<String> moves = new ArrayList<String>();
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	/*public Rectangle getBounds() { // collider
@@ -49,36 +50,60 @@ public class Game extends JPanel{
 		Player2.move();
 	}*/
 	public void movePlayer(int i) {
-		if (i == 1)
-			Player1.y = Player1.y + tileSize + marginSize;
-			
-			
-		if (i == 2)
-			Player2.y = Player2.y - tileSize - marginSize;
-			
-		//move();
+		if (turn.onePlaysNext) {
+			if (i == 0) { 
+				Player1.y = Player1.y - tileSize - marginSize;
+			} else if (i == 1) {
+				Player1.x = Player1.x - tileSize - marginSize;
+			} else if (i == 2) {
+				Player1.y = Player1.y + tileSize + marginSize;
+			} else if (i == 3) {
+				Player1.x = Player1.x + tileSize + marginSize;
+			}
+		}
+		else {
+			if (i == 0) { 
+				Player2.y = Player2.y - tileSize - marginSize;
+			} else if (i == 1) {
+				Player2.x = Player2.x - tileSize - marginSize;
+			} else if (i == 2) {
+				Player2.y = Player2.y + tileSize + marginSize;
+			} else if (i == 3) {
+				Player2.x = Player2.x + tileSize + marginSize;
+			}
+		}	
+
+		turn.switchPlayer();
 		repaint();
 	}
 
 	public void paint(Graphics g) {
 		if (lastClickedGame != "") {
-			if (lastClickedGame == "player1") {
+			if (moves.contains(lastClickedGame)) {
+				for (int i = 0; i < 4; i++) {
+				    if(moves.get(i).equals(lastClickedGame)){
+				        movePlayer(i);
+				    }
+				}
+			}
+			if (lastClickedGame != "" && lastClickedGame != null) {
 				Player1.first = false;
 				Player2.first = false;
-				if (turn.onePlaysNext) {
+			}
+			/*  if (turn.onePlaysNext) {
 					movePlayer(1);
 					turn.switchPlayer();
 				}
 				
 			}
-		if (lastClickedGame == "player2"){
+			if (lastClickedGame == "player2"){
 				Player1.first = false;
 				Player2.first = false;
 				if (!turn.onePlaysNext) {
 					movePlayer(2);
 					turn.switchPlayer();
 				}
-			}
+			} */
 			lastClickedGame = "";
 		}
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
@@ -117,8 +142,8 @@ public class Game extends JPanel{
 		if (turn.onePlaysNext == true) { //Player 1 turn
 			if(Player1.i == 1) {
 				moves = new ArrayList<String>();
-				//moves = ArrayList<String>("", "", "", "");
-				System.out.println(moves);
+				for (int j = 0; j < 4; j++)
+					moves.add("");
 				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
 				g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
@@ -127,9 +152,20 @@ public class Game extends JPanel{
 				if (highlightups1 > 0) {
 					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
 					int tile_y = (int) Math.ceil((Player1.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
-					moves.add(Integer.toString(tile_x) + " " + Integer.toString(tile_y));
-					System.out.println(moves);
+					moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				}
+				if (highlightupw1 > 0) {
+					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
+					int tile_y = (int) Math.ceil((Player1.y- tileSize - marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+					moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				}
+				int tile_x = (int) Math.ceil((Player1.x - tileSize - marginSize) / (tileSize+marginSize));
+				int tile_y = (int) Math.ceil((Player1.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				tile_x = (int) Math.ceil((Player1.x + tileSize + marginSize) / (tileSize+marginSize));
+				tile_y = (int) Math.ceil((Player1.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+
 			}
 			
 		} else { //Player 2 turn
@@ -139,6 +175,22 @@ public class Game extends JPanel{
 				g2d.fillRect(Player2.x + tileSize + marginSize, Player2.y, tileSize-10, tileSize-10); //playerist paremale
 				g2d.fillRect(Player2.x - tileSize - marginSize, Player2.y, tileSize-10, tileSize-10); //playerist vasakule
 				g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); //playerist ülespoole
+				if (highlightups2 > 0) {
+					int tile_x = (int) Math.ceil(Player2.x / (tileSize+marginSize));
+					int tile_y = (int) Math.ceil((Player2.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+					moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				}
+				if (highlightupw2 > 0) {
+					int tile_x = (int) Math.ceil(Player2.x / (tileSize+marginSize));
+					int tile_y = (int) Math.ceil((Player2.y- tileSize - marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+					moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				}
+				int tile_x = (int) Math.ceil((Player2.x - tileSize - marginSize) / (tileSize+marginSize));
+				int tile_y = (int) Math.ceil((Player2.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				tile_x = (int) Math.ceil((Player2.x + tileSize + marginSize) / (tileSize+marginSize));
+				tile_y = (int) Math.ceil((Player2.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 			}
 			
 		}
