@@ -2,7 +2,7 @@ package lab;
 
 public class Turn {
 	
-	private boolean onePlaysNext = true;
+	public boolean onePlaysNext = true;
 	
 		 
 	

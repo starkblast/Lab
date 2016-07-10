@@ -16,19 +16,21 @@ public class Game extends JPanel{
 	private int i;
 	private int j;
 	private static String lastClickedGame = "";
+	//colors
 	private String player1 = "#588C7E";
 	private String player2 = "#8C4646";
 	public String player1color = "#6677AA";
 	public String player2color = "#AA7766";
 	private String gridcolor = "#F2AE72";
 	private String gridbackgroundcolor ="#D96479";
+	private String highlightcolor ="#F2E394";
 	public int tileSize;  //tile size: getWidth() / 9.45
 	private int marginSize;
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	Player Player1 = new Player(this, 1);
 	Player Player2 = new Player(this, 2);
-
+	Turn turn = new Turn();
 	static Mouse mml = new Mouse();
 	
 	/*public void move() {
@@ -68,6 +70,7 @@ public class Game extends JPanel{
 		g2d.setColor(Color.decode(player2));
 		g2d.fillRect(0, (getHeight()-getWidth())/2+getWidth(), getWidth(), (getHeight()-getWidth())/2);
 		
+		//DRAW GRID
 		g2d.setColor(Color.decode(gridcolor));
 		for (i=0; i<9 ;i++) {
 			for (j=0; j<9 ;j++) {
@@ -80,6 +83,12 @@ public class Game extends JPanel{
 		Player2.paint(g2d);
 		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2, getWidth(), getHeight());
 		repaint();
+		
+		//HIGHLIGHTS
+			if (turn.onePlaysNext == true) {
+				g2d.setColor(Color.decode(highlightcolor));
+				
+			}
 	}
 
 	
