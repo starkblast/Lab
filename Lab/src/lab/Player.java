@@ -49,9 +49,6 @@ public class Player {
 				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5;
 				x = game.getWidth() /2- (game.tileSize-10)/2;
 			}
-
-			System.out.println(x);
-			System.out.println(y);
 		}
 
 		if (i == 1) { // lisada see, kui ta on alumises aares

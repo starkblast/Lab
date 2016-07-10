@@ -3,8 +3,13 @@ package lab;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
+import java.awt.Robot;
+import java.awt.AWTException;
 
 class Mouse implements MouseListener {
 	/*public Game game;
@@ -32,8 +37,19 @@ class Mouse implements MouseListener {
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) { 
+
 		int x = arg0.getX();
 		int y = arg0.getY();
+		
+		 /*try {
+            Robot robot = new Robot();
+            Rectangle area = new Rectangle(0, 0, width, height);
+            final BufferedImage capture = robot.createScreenCapture(area);
+            final Color color = new Color(capture.getRGB(x, y));            
+            System.out.println(color);
+		 } catch (AWTException e) {
+	            e.printStackTrace();
+	     }*/
 
 		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {
 			clickedButton("player1");
