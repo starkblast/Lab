@@ -146,11 +146,19 @@ public class Game extends JPanel{
 				moves = new ArrayList<String>();
 				for (int j = 0; j < 4; j++)
 					moves.add("");
+				// bug: lisab arraysse default asukoha, arvestamata, et vb on kaugemal
 				g2d.setColor(Color.decode(highlightcolor));
-				g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
-				g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
+				if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
+					g2d.fillRect(Player1.x, Player1.y - tileSize*2 - marginSize*2, highlightupw1, highlightupw1); //playerist ülespoole
+				} else
+					g2d.fillRect(Player1.x, Player1.y - tileSize - marginSize, highlightupw1, highlightupw1); //playerist ülespoole
+				//if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
+					//g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
+				//} else	
+					g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
+
 				g2d.fillRect(Player1.x - tileSize - marginSize, Player1.y, tileSize-10, tileSize-10); //playerist vasakule
-				g2d.fillRect(Player1.x, Player1.y - tileSize - marginSize, highlightupw1, highlightupw1); //playerist ülespoole
+				g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
 				if (highlightups1 > 0) {
 					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
 					int tile_y = (int) Math.ceil((Player1.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
@@ -173,7 +181,11 @@ public class Game extends JPanel{
 		} else { //Player 2 turn
 			if (Player2.i != 1) {
 				g2d.setColor(Color.decode(highlightcolor));
-				g2d.fillRect(Player2.x, Player2.y+ tileSize + marginSize, highlightups2, highlightups2); // playerist allapoole
+				if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
+					g2d.fillRect(Player2.x, Player2.y + tileSize*2 + marginSize*2, highlightupw2, highlightupw2); //playerist ülespoole
+				} else
+					g2d.fillRect(Player2.x, Player2.y + tileSize + marginSize, highlightupw2, highlightupw2); //playerist ülespoole
+				//g2d.fillRect(Player2.x, Player2.y+ tileSize + marginSize, highlightups2, highlightups2); // playerist allapoole
 				g2d.fillRect(Player2.x + tileSize + marginSize, Player2.y, tileSize-10, tileSize-10); //playerist paremale
 				g2d.fillRect(Player2.x - tileSize - marginSize, Player2.y, tileSize-10, tileSize-10); //playerist vasakule
 				g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); //playerist ülespoole
@@ -193,13 +205,9 @@ public class Game extends JPanel{
 				tile_x = (int) Math.ceil((Player2.x + tileSize + marginSize) / (tileSize+marginSize));
 				tile_y = (int) Math.ceil((Player2.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
 				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
-			}
-			
-		}
-			
+			}	
+		}		
 	}
-	
-
 	
 	public static void main(String[] args) throws InterruptedException {
 		frame = new JFrame("Labyrinth cancer game");
