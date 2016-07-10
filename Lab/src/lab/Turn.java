@@ -3,37 +3,28 @@ package lab;
 public class Turn {
 	
 	public boolean onePlaysNext = true;
-	public Game game;	 
-	
+	public Game game;
+
+
+	public Turn(Game game) {
+		this.game= game;
+	}
 	public void switchPlayer() {
 	
 		   onePlaysNext = !onePlaysNext;
 	
-	
-	
-		 
-	
-		//Player 1:
-
-	if (onePlaysNext) {
-	
-			//player 1 acts.
-		switchPlayer();
-	
-	}   
-	
-		 
-	
-	//Player 2:
-	
-	if (!onePlaysNext) {
+		if (onePlaysNext) {
+			game.player1 = "#8AAFAF";
+			game.player2 = "#8C4646";
+				
+		}   
 		
-		    //player 2 acts.
-	
-		switchPlayer();
-	
-	}
-	
+		
+		if (!onePlaysNext) {
+			game.player2 = "#AF7979";
+			game.player1 = "#588C7E";
+		}
+		
 	
 	}
 	

@@ -44,9 +44,7 @@ public class Player {
 			if (i == 1) {
 				y = ((game.getHeight()-game.getWidth())/2 + 5);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
-				if (y>=(game.getHeight()-game.getWidth())/2) { 
-					game.highlightupw = 0;
-				}
+				
 			} else {
 				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5;
 				x = game.getWidth() /2- (game.tileSize-10)/2;
@@ -56,9 +54,19 @@ public class Player {
 			System.out.println(y);
 		}
 
-		if (i == 1) {
+		if (i == 1) { // lisada see, kui ta on alumises aares
+			if (y<=(game.getHeight()-game.getWidth())/2 + 5) { 
+				game.highlightupw1 = 0;
+			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5) {
+				game.highlightups1 = 0;
+			}
 			g.setColor(Color.decode(game.player1color));
 		} else {
+			if (y <=(game.getHeight()-game.getWidth())/2) { 
+				game.highlightupw2 = 0;
+			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5) {
+				game.highlightups2 = 0;
+			}
 			g.setColor(Color.decode(game.player2color));
 			
 		}
