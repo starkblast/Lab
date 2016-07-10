@@ -29,7 +29,11 @@ public class Player {
 	}
 
 	void move() {
-		game.repaint();
+		//game.repaint();
+	}
+	
+	void displayHighlights () {
+		
 	}
 
 	public void paint(Graphics2D g) {

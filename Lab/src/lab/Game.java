@@ -31,16 +31,16 @@ public class Game extends JPanel{
 
 	static Mouse mml = new Mouse();
 	
-	public void move() {
+	/*public void move() {
 		Player1.move();
 		Player2.move();
-	}
+	}*/
 	public void movePlayer(int i) {
 		if (i == 1)
 			Player1.x = Player1.x + tileSize + marginSize;
 		if (i == 2)
 			Player2.x = Player2.x + tileSize + marginSize;
-		move();
+		//move();
 		repaint();
 	}
 
@@ -93,7 +93,7 @@ public class Game extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.BLACK);
 		while (true) {
-			game.move();
+			//game.move();
 			game.repaint();
 			if (mml.lastclicked != "") {
 				lastClickedGame = mml.lastclicked;
