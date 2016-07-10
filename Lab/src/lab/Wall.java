@@ -16,33 +16,40 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Wall {
-
+	
+	//variables
 	public int w;
 	public int l;
 	public String wallmarkercolor = "#583668";
 	public int markersize;
-	
+	public int walltoggle = 0;
 	public Game game;
 	
-	public Wall(Game game) {
-		this.game= game;
-	}
 	
+	public Wall(Game game) {
+		this.game = game;
+	}
 	
 	public void paint(Graphics g) {
 		
-		markersize = (int) (game.tileSize/5);
+		markersize = (int) (game.tileSize/5); 
+		Graphics2D g2d = (Graphics2D) g;
 		
-		for (w = 0; w < 8; w++ ) {
-			for (l = 0; l < 8; l++ ) {
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setColor(Color.decode(wallmarkercolor));
-				g2d.fillOval(game.tileSize + w * (game.tileSize + game.marginSize) - markersize/2 + 1/*extra pixel for comfort of eyes*/ , (game.getHeight()-game.getWidth())/2 + game.tileSize + l*(game.tileSize + game.marginSize)-markersize/2,markersize,markersize);
+		if (walltoggle % 2 >= 1) { //basically a boolean but simplifies
+		
+			for (w = 0; w < 8; w++ ) {
+				for (l = 0; l < 8; l++ ) {
+					g2d.setColor(Color.decode(wallmarkercolor));
+					g2d.fillOval(game.tileSize + w * (game.tileSize + game.marginSize) - markersize/2 + 1/*extra pixel for comfort of eyes*/ , (game.getHeight()-game.getWidth())/2 + game.tileSize + l*(game.tileSize + game.marginSize)-markersize/2,markersize,markersize);
+					//System.out.println("jah");
+				}
 			}
-		}
-	}
+		
+		} //if statement
+		
+	} // end of graphics
 	
 		
 	
 	
-}
+} // end of class

@@ -40,7 +40,7 @@ public class Game extends JPanel{
 	/*public Rectangle getBounds() { // collider
 		return new Rectangle(0, 0, getWidth(), (getHeight()-getWidth())/2);
 	}*/ 
-	Player Player1 = new Player(this, 1);
+	Player Player1 = new Player(this, 1);  //classid
 	Player Player2 = new Player(this, 2);
 	Turn turn = new Turn(this);
 	Wall wall = new Wall(this);
@@ -91,6 +91,13 @@ public class Game extends JPanel{
 				Player1.first = false;
 				Player2.first = false;
 			}
+			
+			if (lastClickedGame =="side1" || lastClickedGame =="side2") { // call wall grid
+				wall.walltoggle++;
+				
+				
+			}
+			
 			/*  if (turn.onePlaysNext) {
 					movePlayer(1);
 					turn.switchPlayer();

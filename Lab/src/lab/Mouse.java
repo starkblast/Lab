@@ -51,12 +51,12 @@ class Mouse implements MouseListener {
 	            e.printStackTrace();
 	     }*/
 
-		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {
+		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {   //player1 location
 			clickedButton("player1");
 			lastclicked = "player1";
 		}
 		
-		else if (Math.abs(x - x2) < 20 && Math.abs(y - y2 ) < 20) {
+		else if (Math.abs(x - x2) < 20 && Math.abs(y - y2 ) < 20) {   //player2 location
 			clickedButton("player2");
 			lastclicked = "player2";
 		}

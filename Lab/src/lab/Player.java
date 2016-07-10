@@ -32,12 +32,6 @@ public class Player {
 		//game.repaint();
 	}
 	
-	void displayHighlights () {
-		
-		/*if (y>=(game.getHeight()-game.getWidth())/2) { 
-			game.highlightupw = 0;
-		}*/
-	}
 
 	public void paint(Graphics2D g) {
 		if(first) {
