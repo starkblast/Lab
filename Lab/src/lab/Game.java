@@ -49,11 +49,17 @@ public class Game extends JPanel{
 	public void paint(Graphics g) {
 		if (lastClickedGame != "") {
 			System.out.println(lastClickedGame);
-
-			if (lastClickedGame == "player1")
+			
+			if (lastClickedGame == "player1") {
+				Player1.first = false;
+				Player2.first = false;
 				movePlayer(1);
-			if (lastClickedGame == "player2")
+			}
+		if (lastClickedGame == "player2"){
+				Player1.first = false;
+				Player2.first = false;
 				movePlayer(2);
+			}
 			lastClickedGame = "";
 		}
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
