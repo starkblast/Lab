@@ -28,7 +28,7 @@ public class Game extends JPanel{
 	private String gridbackgroundcolor ="#D96479";
 	private String highlightcolor ="#F2E394";
 	public int tileSize;  //tile size: getWidth() / 9.45
-	private int marginSize;
+	public int marginSize;
 	public int highlightupw1;
 	public int highlightupw2;
 	public int highlightups1;
@@ -42,6 +42,7 @@ public class Game extends JPanel{
 	Player Player1 = new Player(this, 1);
 	Player Player2 = new Player(this, 2);
 	Turn turn = new Turn(this);
+	Wall wall = new Wall(this);
 	static Mouse mml = new Mouse();
 	
 	/*public void move() {
@@ -90,7 +91,7 @@ public class Game extends JPanel{
 		
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.decode(gridbackgroundcolor));	
-		// must kast
+		// grid background color
 		g2d.fillRect(0, (getHeight()-getWidth())/2, getWidth(), getWidth());
 		// ülemine kast
 		g2d.setColor(Color.decode(player1));
@@ -110,6 +111,7 @@ public class Game extends JPanel{
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		Player1.paint(g2d);
 		Player2.paint(g2d);
+		wall.paint(g2d);
 		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2, getWidth(), getHeight());
 		repaint();
 		
