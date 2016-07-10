@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.Console;
+import java.util.ArrayList;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
@@ -32,6 +33,7 @@ public class Game extends JPanel{
 	public int highlightupw2;
 	public int highlightups1;
 	public int highlightups2;
+	public ArrayList<String> moves;
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	/*public Rectangle getBounds() { // collider
@@ -63,14 +65,19 @@ public class Game extends JPanel{
 			if (lastClickedGame == "player1") {
 				Player1.first = false;
 				Player2.first = false;
-				movePlayer(1);
-				turn.switchPlayer();
+				if (turn.onePlaysNext) {
+					movePlayer(1);
+					turn.switchPlayer();
+				}
+				
 			}
 		if (lastClickedGame == "player2"){
 				Player1.first = false;
 				Player2.first = false;
-				movePlayer(2);
-				turn.switchPlayer();
+				if (!turn.onePlaysNext) {
+					movePlayer(2);
+					turn.switchPlayer();
+				}
 			}
 			lastClickedGame = "";
 		}
@@ -109,33 +116,29 @@ public class Game extends JPanel{
 		//HIGHLIGHTS
 		if (turn.onePlaysNext == true) { //Player 1 turn
 			if(Player1.i == 1) {
+				moves = new ArrayList<String>();
+				//moves = ArrayList<String>("", "", "", "");
+				System.out.println(moves);
 				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
-				
-				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
-				
-				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player1.x - tileSize - marginSize, Player1.y, tileSize-10, tileSize-10); //playerist vasakule
-				
-				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player1.x, Player1.y - tileSize - marginSize, highlightupw1, highlightupw1); //playerist ülespoole
+				if (highlightups1 > 0) {
+					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
+					int tile_y = (int) Math.ceil((Player1.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+					moves.add(Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+					System.out.println(moves);
+				}
 			}
 			
 		} else { //Player 2 turn
 			if (Player2.i != 1) {
 				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player2.x, Player2.y+ tileSize + marginSize, highlightups2, highlightups2); // playerist allapoole
-				
-				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player2.x + tileSize + marginSize, Player2.y, tileSize-10, tileSize-10); //playerist paremale
-				
-				g2d.setColor(Color.decode(highlightcolor));
 				g2d.fillRect(Player2.x - tileSize - marginSize, Player2.y, tileSize-10, tileSize-10); //playerist vasakule
-				
-				g2d.setColor(Color.decode(highlightcolor));
-				g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); 
-				//playerist ülespoole
+				g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); //playerist ülespoole
 			}
 			
 		}

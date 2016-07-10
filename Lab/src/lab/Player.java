@@ -42,26 +42,27 @@ public class Player {
 	public void paint(Graphics2D g) {
 		if(first) {
 			if (i == 1) {
-				y = ((game.getHeight()-game.getWidth())/2 + 5);
+				y = ((game.getHeight()-game.getWidth())/2 + game.tileSize/8);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
 				
 			} else {
-				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5;
+				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8;
 				x = game.getWidth() /2- (game.tileSize-10)/2;
 			}
+
 		}
 
-		if (i == 1) { // lisada see, kui ta on alumises aares
+		if (i == 1) {
 			if (y<=(game.getHeight()-game.getWidth())/2 + 5) { 
 				game.highlightupw1 = 0;
-			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5) {
+			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups1 = 0;
 			}
 			g.setColor(Color.decode(game.player1color));
 		} else {
-			if (y <=(game.getHeight()-game.getWidth())/2) { 
+			if (y<=(game.getHeight()-game.getWidth())/2) { 
 				game.highlightupw2 = 0;
-			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5) {
+			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups2 = 0;
 			}
 			g.setColor(Color.decode(game.player2color));
