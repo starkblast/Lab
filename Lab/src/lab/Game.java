@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 public class Game extends JPanel{
 	private int i;
 	private int j;
+	private static String lastClickedGame = "";
 	private String player1 = "#588C7E";
 	private String player2 = "#8C4646";
 	public String player1color = "#6677AA";
@@ -22,15 +23,35 @@ public class Game extends JPanel{
 	private String gridcolor = "#F2AE72";
 	private String gridbackgroundcolor ="#D96479";
 	public int tileSize;  //tile size: getWidth() / 9.45
-	private int marginSize; //margin size: (getWidth() - (getWidth() / 9.45)) / 8
+	private int marginSize;
+	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	Player Player1 = new Player(this, 1);
 	Player Player2 = new Player(this, 2);
-	
+
 	static Mouse mml = new Mouse();
+	
+	public void move() {
+		Player1.move();
+		Player2.move();
+	}
+	public void movePlayer(int i) {
+		if (i == 1)
+			Player1.x = Player1.x + 42;
+		if (i == 2)
+			Player2.x = Player2.x + 42;
+		move();
+		repaint();
+	}
 
 	public void paint(Graphics g) {
-		System.out.println(Player1.x);
+		if (lastClickedGame != "") {
+			if (lastClickedGame == "player1")
+				movePlayer(1);
+			if (lastClickedGame == "player2")
+				movePlayer(2);
+			lastClickedGame = "";
+		}
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
 		marginSize = (int) Math.ceil(tileSize / 20);
 		
@@ -55,18 +76,34 @@ public class Game extends JPanel{
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		Player1.paint(g2d);
 		Player2.paint(g2d);
+		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2);
+		repaint();
 	}
 
 	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Labyrinth cancer game");
-
+	public static void main(String[] args) throws InterruptedException {
+		frame = new JFrame("Labyrinth cancer game");
 		frame.addMouseListener(mml);
 		frame.add(new Game());
+		Game game = new Game();
 		frame.setSize(376, 616);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.BLACK);
+		while (true) {
+			game.move();
+			game.repaint();
+			if (mml.lastclicked != "") {
+				if (mml.lastclicked == "player1") {
+					lastClickedGame = "player1";
+				}
+				if (mml.lastclicked == "player2") {
+					lastClickedGame = "player2";
+				}
+				mml.lastclicked = "";
+			}
+			Thread.sleep(10);
+		}
 	
 	}
 }
