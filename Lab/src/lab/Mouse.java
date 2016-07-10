@@ -15,13 +15,17 @@ class Mouse implements MouseListener {
 	private int x2;
 	private int y1;
 	private int y2;
+	private int width;
+	private int height;
 	public String lastclicked;
 	
-	public void getPlayerPosition(int x1, int y1, int x2, int y2) {
+	public void getPlayerPosition(int x1, int y1, int x2, int y2, int width, int height) {
 		this.x1 = x1;
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
+		this.width = width;
+		this.height = height;
 	}
 	public String clickedButton(String button) {
 		return button;
@@ -36,10 +40,25 @@ class Mouse implements MouseListener {
 			lastclicked = "player1";
 		}
 		
-		if (Math.abs(x - x2) < 20 && Math.abs(y - y2 ) < 20) {
+		else if (Math.abs(x - x2) < 20 && Math.abs(y - y2 ) < 20) {
 			clickedButton("player2");
 			lastclicked = "player2";
 		}
+		else {
+			if (y > ((height-width)/2) && y < ((height-width)/2)+width) {
+				int tileSize =(int) Math.ceil(width / 9.45);
+				int marginSize = (int) Math.ceil(tileSize / 20);
+				int tile_x = (int) Math.ceil(x / (tileSize+marginSize));
+				int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize));
+				lastclicked = Integer.toString(tile_x) + " " + Integer.toString(tile_y);
+			}
+			else if (y < (height-width)/2) {
+				lastclicked = "side1";
+			}
+			else if (y > (height-width)/2+width) {
+				lastclicked = "side2";
+			}
+		} 
 		
 	}
 	
@@ -48,7 +67,9 @@ class Mouse implements MouseListener {
 	}
 	
 	@Override
-	public void mouseExited(MouseEvent arg0) { }
+	public void mouseExited(MouseEvent arg0) { 
+		
+	}
 	
 	@Override
 	public void mousePressed(MouseEvent arg0) {

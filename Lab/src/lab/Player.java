@@ -19,7 +19,7 @@ public class Player {
 	int xa = 1;
 	int ya = 1;
 	int i;
-	boolean first = true;
+	int first = 0;
 	public Game game;
 
 
@@ -33,7 +33,7 @@ public class Player {
 	}
 
 	public void paint(Graphics2D g) {
-		if(first) {
+		if(first < 10) {
 			if (i == 1) {
 				y = ((game.getHeight()-game.getWidth())/2 + 5);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
@@ -41,8 +41,12 @@ public class Player {
 				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + 5;
 				x = game.getWidth() /2- (game.tileSize-10)/2;
 			}
-			first = false;
+			++first;
+
+			System.out.println(x);
+			System.out.println(y);
 		}
+
 		if (i == 1) {
 			g.setColor(Color.decode(game.player1color));
 		} else {

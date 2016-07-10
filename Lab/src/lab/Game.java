@@ -37,15 +37,17 @@ public class Game extends JPanel{
 	}
 	public void movePlayer(int i) {
 		if (i == 1)
-			Player1.x = Player1.x + 42;
+			Player1.x = Player1.x + tileSize + marginSize;
 		if (i == 2)
-			Player2.x = Player2.x + 42;
+			Player2.x = Player2.x + tileSize + marginSize;
 		move();
 		repaint();
 	}
 
 	public void paint(Graphics g) {
 		if (lastClickedGame != "") {
+			System.out.println(lastClickedGame);
+
 			if (lastClickedGame == "player1")
 				movePlayer(1);
 			if (lastClickedGame == "player2")
@@ -76,7 +78,7 @@ public class Game extends JPanel{
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		Player1.paint(g2d);
 		Player2.paint(g2d);
-		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2);
+		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2, getWidth(), getHeight());
 		repaint();
 	}
 
@@ -94,12 +96,7 @@ public class Game extends JPanel{
 			game.move();
 			game.repaint();
 			if (mml.lastclicked != "") {
-				if (mml.lastclicked == "player1") {
-					lastClickedGame = "player1";
-				}
-				if (mml.lastclicked == "player2") {
-					lastClickedGame = "player2";
-				}
+				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
 			}
 			Thread.sleep(10);
