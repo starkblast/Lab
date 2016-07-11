@@ -17,7 +17,7 @@ public class Turn {
 		if (onePlaysNext) {
 			game.player1 = "#8AAFAF";
 			game.player2 = "#8C4646";
-				
+			
 		}   
 		
 		

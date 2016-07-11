@@ -79,7 +79,7 @@ class Mouse implements MouseListener {
 	
 	@Override
 	public void mousePressed(MouseEvent arg0) { // checks if wall-grid-markers are clicked or at least almost clicked
-		
+		//Start = arg0.getPoint();
 		int x = arg0.getX();
 		int y = arg0.getY();
 		int tileSize =(int) Math.ceil(width / 9.45);
@@ -87,9 +87,8 @@ class Mouse implements MouseListener {
 		int tile_x = (int) Math.ceil(x / (tileSize+marginSize));
 		int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize))+1;
 		if (Math.abs(tile_x * (tileSize+marginSize) - x) <= 10 && tile_y * (tileSize + marginSize) - ((height-width)/2) - y <= 10) {
-			//Start = arg0.getPoint();
-			Start = new Point(tile_x * (tileSize+marginSize)-2, tile_y*(tileSize+marginSize)+((height-width)/2)-2);
-			System.out.println("right");
+			if (y > (height-width)/2 && y < (height-width)/2 + width)
+				Start = new Point(tile_x * (tileSize+marginSize)-2, tile_y*(tileSize+marginSize)+((height-width)/2)-2);
 		}
 		else 
 			Start = null; 

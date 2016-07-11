@@ -33,7 +33,7 @@ public class Player {
 	void move() {}
 
 	public void paint(Graphics2D g) {
-		if(first) { // moves to default location
+		/*if(first) { // moves to default location
 			if (i == 1) {
 				y = ((game.getHeight()-game.getWidth())/2 + game.tileSize/8);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
@@ -43,13 +43,17 @@ public class Player {
 				x = game.getWidth() /2- (game.tileSize-10)/2;
 			}
 
-		}
-
+		}*/
 		if (i == 1) { // checks if world ends next to player 1
 			if (y<=(game.getHeight()-game.getWidth())/2 + 5) { 
 				game.highlightupw1 = 0;
 			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups1 = 0;
+			}
+			if (y<=(game.getHeight()-game.getWidth())/2 + 5 + game.tileSize + game.marginSize)
+				game.highdw1 = true;
+			if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8 - game.tileSize - game.marginSize) {
+				game.highds1 = true;
 			}
 			g.setColor(Color.decode(game.player1color));
 		} else { // checks if world ends next to player 2
@@ -58,6 +62,11 @@ public class Player {
 			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups2 = 0;
 			}
+			if (y<=(game.getHeight()-game.getWidth())/2 + 5 + game.tileSize + game.marginSize)
+				game.highdw2 = true;
+			if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8 - game.tileSize + game.marginSize)
+				game.highds2 = true;
+		
 			g.setColor(Color.decode(game.player2color));
 			
 		} // fills oval (that's the player)
