@@ -30,13 +30,10 @@ public class Player {
 		this.i = i;
 	}
 
-	void move() {
-		//game.repaint();
-	}
-	
+	void move() {}
 
 	public void paint(Graphics2D g) {
-		if(first) {
+		if(first) { // moves to default location
 			if (i == 1) {
 				y = ((game.getHeight()-game.getWidth())/2 + game.tileSize/8);
 				x = game.getWidth() /2 - (game.tileSize-10)/2;
@@ -48,14 +45,14 @@ public class Player {
 
 		}
 
-		if (i == 1) {
+		if (i == 1) { // checks if world ends next to player 1
 			if (y<=(game.getHeight()-game.getWidth())/2 + 5) { 
 				game.highlightupw1 = 0;
 			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups1 = 0;
 			}
 			g.setColor(Color.decode(game.player1color));
-		} else {
+		} else { // checks if world ends next to player 2
 			if (y<=(game.getHeight()-game.getWidth())/2) { 
 				game.highlightupw2 = 0;
 			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
@@ -63,20 +60,11 @@ public class Player {
 			}
 			g.setColor(Color.decode(game.player2color));
 			
-		}
+		} // fills oval (that's the player)
 		g.fillOval(x, y, game.tileSize-10, game.tileSize-10);
 	}
 	
 	/*public boolean collision() {
-		return getBounds().intersects(game.getBounds());
+		return getBounds().intersects(game.getBounds());*/
 		
 	}
-	
-	public Rectangle getBounds() {
-		return new Rectangle(x, y, game.tileSize, game.tileSize);
-	}*/
-	
-	//(getHeight()-getWidth())/2)
-	
-	
-}

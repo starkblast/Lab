@@ -10,6 +10,7 @@ public class MotionMouse implements MouseMotionListener {
 
     public Point pointEnd = null;
 	
+    // gets coordinates of mouse for drawing lines on wall-grid-marker mode
 	@Override
 	public void mouseDragged(MouseEvent e) {
         pointEnd = e.getPoint();

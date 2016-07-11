@@ -19,10 +19,7 @@ import java.awt.Robot;
 import java.awt.AWTException;
 
 class Mouse implements MouseListener {
-	/*public Game game;
-	class Mouse(Game game) {
-		this.game = game;
-	}*/
+
 	private int x1;
 	private int x2;
 	private int y1;
@@ -40,35 +37,21 @@ class Mouse implements MouseListener {
 		this.width = width;
 		this.height = height;
 	}
-	public String clickedButton(String button) {
-		return button;
-	}
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) { 
 
 		int x = arg0.getX();
 		int y = arg0.getY();
-		
-		 /*try {
-            Robot robot = new Robot();
-            Rectangle area = new Rectangle(0, 0, width, height);
-            final BufferedImage capture = robot.createScreenCapture(area);
-            final Color color = new Color(capture.getRGB(x, y));            
-            System.out.println(color);
-		 } catch (AWTException e) {
-	            e.printStackTrace();
-	     }*/
 
 		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {   //player1 location
-			clickedButton("player1");
 			lastclicked = "player1";
 		}
 		
 		else if (Math.abs(x - x2) < 20 && Math.abs(y - y2 ) < 20) {   //player2 location
-			clickedButton("player2");
 			lastclicked = "player2";
 		}
-		else {
+		else { // gets coordinates of clicked tile
 			if (y > ((height-width)/2) && y < ((height-width)/2)+width) {
 				int tileSize =(int) Math.ceil(width / 9.45);
 				int marginSize = (int) Math.ceil(tileSize / 20);
@@ -76,7 +59,7 @@ class Mouse implements MouseListener {
 				int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize));
 				lastclicked = Integer.toString(tile_x) + " " + Integer.toString(tile_y);
 			}
-			else if (y < (height-width)/2) {
+			else if (y < (height-width)/2) { // checks if sides are clicked
 				lastclicked = "side1";
 			}
 			else if (y > (height-width)/2+width) {
@@ -95,8 +78,21 @@ class Mouse implements MouseListener {
 	}
 	
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		Start = arg0.getPoint();
+	public void mousePressed(MouseEvent arg0) { // checks if wall-grid-markers are clicked or at least almost clicked
+		
+		int x = arg0.getX();
+		int y = arg0.getY();
+		int tileSize =(int) Math.ceil(width / 9.45);
+		int marginSize = (int) Math.ceil(tileSize / 20);
+		int tile_x = (int) Math.ceil(x / (tileSize+marginSize));
+		int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize))+1;
+		if (Math.abs(tile_x * (tileSize+marginSize) - x) <= 10 && tile_y * (tileSize + marginSize) - ((height-width)/2) - y <= 10) {
+			//Start = arg0.getPoint();
+			Start = new Point(tile_x * (tileSize+marginSize)-2, tile_y*(tileSize+marginSize)+((height-width)/2)-2);
+			System.out.println("right");
+		}
+		else 
+			Start = null; 
 	}
 	
 	@Override

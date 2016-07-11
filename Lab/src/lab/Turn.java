@@ -9,10 +9,11 @@ public class Turn {
 	public Turn(Game game) {
 		this.game= game;
 	}
+	
 	public void switchPlayer() {
-	
 		   onePlaysNext = !onePlaysNext;
-	
+		   
+		// sides light up
 		if (onePlaysNext) {
 			game.player1 = "#8AAFAF";
 			game.player2 = "#8C4646";
@@ -24,8 +25,5 @@ public class Turn {
 			game.player2 = "#AF7979";
 			game.player1 = "#588C7E";
 		}
-		
-	
 	}
-	
 }
