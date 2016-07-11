@@ -63,6 +63,9 @@ public class Game extends JPanel {
 	// variables to permit double jump
 	boolean doublew = false, doublea = false, doubles = false, doubled = false;
 	boolean doublew2 = false, doublea2 = false, doubles2 = false, doubled2 = false;
+	// variables that check presence of walls
+	public boolean ww1 = false, wa1 = false, ws1 = false, wd1 = false,
+		  	   	   ww2 = false, wa2 = false, ws2 = false, wd2 = false; 
 
 	
 	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
@@ -107,6 +110,38 @@ public class Game extends JPanel {
 			rescale = false;
 			
 	}
+	
+	// returns all walls with size tileSize
+	public ArrayList<ArrayList<Integer>> calculateWalls() {
+		ArrayList<ArrayList<Integer>> allwalls = new ArrayList<ArrayList<Integer>>();
+
+		for (i = 0; i < walls1.size(); i++) {
+			ArrayList<Integer> wallPoints = walls1.get(i);
+			if (wallPoints.get(0) == wallPoints.get(2)) {  ////////              4 1 6 1
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(1), wallPoints.get(0), (wallPoints.get(1)+wallPoints.get(3))/2)));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), (wallPoints.get(1)+wallPoints.get(3))/2, wallPoints.get(0), wallPoints.get(3))));
+				//allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(3))));
+			} else {
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(1), (wallPoints.get(0)+wallPoints.get(2))/2, wallPoints.get(1))));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList((wallPoints.get(0)+wallPoints.get(2))/2, wallPoints.get(1), wallPoints.get(2), wallPoints.get(1))));
+				//allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(2), wallPoints.get(1))));
+			}
+		}
+		for (i = 0; i < walls2.size(); i++) {
+			ArrayList<Integer> wallPoints = walls2.get(i);
+			if (wallPoints.get(0) == wallPoints.get(2)) {
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(1))));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), (wallPoints.get(1)+wallPoints.get(3))/2)));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(3))));
+			} else {
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(0), wallPoints.get(1))));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList((wallPoints.get(0)+wallPoints.get(2))/2, wallPoints.get(1))));
+				allwalls.add(new ArrayList<Integer>(Arrays.asList(wallPoints.get(2), wallPoints.get(1))));
+			}
+		}
+		return allwalls;
+	}
+	
 	public void movePlayer(int i) { // moves player in direction defined by i
 		if (turn.onePlaysNext) {
 			if (i == 0) { 
@@ -246,15 +281,13 @@ public class Game extends JPanel {
 		for (int x = 0; x < walls1.size(); x++) { // player 1 walls
             g.setColor(Color.decode(wall.wallmarkercolor));
             g2d.setStroke(new BasicStroke(tileSize/7));
-			g.drawLine(walls1.get(x).get(0), walls1.get(x).get(1), walls1.get(x).get(2), walls1.get(x).get(3));
-			//g.drawString(Integer.toString(10-walls1.size()), 0, 50);
+			g.drawLine(walls1.get(x).get(0)* (tileSize+marginSize)-1, walls1.get(x).get(1)*(tileSize+marginSize)+((getHeight()-getWidth())/2)-3, walls1.get(x).get(2)*(tileSize+marginSize)-1, walls1.get(x).get(3)*(tileSize+marginSize)+(getHeight()-getWidth())/2-3);
 		}
 		for (int x = 0; x < walls2.size(); x++) { // player 2 walls 
             g.setColor(Color.decode(wall.wallmarkercolor));
             g2d.setStroke(new BasicStroke(tileSize/7));
-			g.drawLine(walls2.get(x).get(0), walls2.get(x).get(1), walls2.get(x).get(2), walls2.get(x).get(3));
-			//g.drawString(Integer.toString(10-walls2.size()), 150, 50);
-
+			g.drawLine(walls2.get(x).get(0)* (tileSize+marginSize)-1, walls2.get(x).get(1)*(tileSize+marginSize)+((getHeight()-getWidth())/2)-3, walls2.get(x).get(2)*(tileSize+marginSize)-1, walls2.get(x).get(3)*(tileSize+marginSize)+(getHeight()-getWidth())/2-3);
+			
 		}
 		// draw things that show how many walls are left
 		for (int x = 0; x < 10-walls1.size(); x++) {
@@ -274,35 +307,35 @@ public class Game extends JPanel {
 				if ((turn.onePlaysNext && walls1.size() < 10) || (!turn.onePlaysNext && walls2.size() < 10)) {
 	            g.setColor(Color.decode(wall.wallmarkercolor)); 
 	            g2d.setStroke(new BasicStroke(tileSize/6));
-	            g.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y); // draw unfinished walls
+	            g.drawLine(pointStart.x* (tileSize+marginSize)-2, pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2, pointEnd.x, pointEnd.y); // draw unfinished walls
 	            
 	            // add correct walls to array
-	            if (Math.abs(pointStart.x - pointEnd.x) <= 5 && Math.abs(pointStart.y-pointEnd.y) >= tileSize*2+marginSize) {
-	            	if (pointEnd.y > pointStart.y) {
+	            if (Math.abs(pointStart.x*(tileSize+marginSize)-2 - pointEnd.x) <= 5 && Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2-pointEnd.y) >= tileSize*2+marginSize) {
+	            	if (pointEnd.y > pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2) {
 	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + tileSize*2+marginSize)));
+	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
 	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + tileSize*2+marginSize)));
+	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
 	            	} else {
 	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - tileSize*2-marginSize)));
+	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
 	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - tileSize*2-marginSize)));
+	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
 	            	}
 	            	mml.Start = null;
 	            	pointStart = null;
-	            } else if (Math.abs(pointStart.y - pointEnd.y) <= 5 && Math.abs(pointStart.x-pointEnd.x) >= tileSize*2+marginSize) {
-	            	if (pointEnd.x > pointStart.x) {
+	            } else if (Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2 - pointEnd.y) <= 5 && Math.abs(pointStart.x* (tileSize+marginSize)-2-pointEnd.x) >= tileSize*2+marginSize) {
+	            	if (pointEnd.x > pointStart.x* (tileSize+marginSize)-2) {
 	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + tileSize*2+marginSize, pointStart.y)));
+	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
 	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + tileSize*2+marginSize, pointStart.y)));
+	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
 
 	            	} else {
 	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - tileSize*2-marginSize, pointStart.y)));
+	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
 	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - tileSize*2-marginSize, pointStart.y)));
+	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
 	            	}
 	            	mml.Start = null; // stop drawing
 	            	pointStart = null;
@@ -352,28 +385,33 @@ public class Game extends JPanel {
 				doublea = false;
 				doubles = false;
 				doubled = false;
+
 				if (Player1.y - Player2.y == tileSize+marginSize && Player1.x == Player2.x) {
 					doublew = true;
 					if (!highdw1)
 						g.fillPolygon(xPointsUp, new int[] {yPointsUp[0]-tileSize-marginSize, yPointsUp[1]-tileSize-marginSize, yPointsUp[2]-tileSize-marginSize}, highlightupw1);
 				} else
-					g.fillPolygon(xPointsUp, yPointsUp, highlightupw1);
+					if (!ww1)
+						g.fillPolygon(xPointsUp, yPointsUp, highlightupw1);
 				if (Player2.y - Player1.y == tileSize+marginSize && Player1.x == Player2.x) {
 					doubles = true;
 					if (!highds1)
 						g.fillPolygon(xPointsDown, new int[] {yPointsDown[0]+tileSize+marginSize, yPointsDown[1]+tileSize+marginSize, yPointsDown[2]+tileSize+marginSize}, highlightups1);
 				} else
-					g.fillPolygon(xPointsDown, yPointsDown, highlightups1);
+					if (!ws1)
+						g.fillPolygon(xPointsDown, yPointsDown, highlightups1);
 				if (Player1.x - Player2.x == tileSize+marginSize && Player1.y == Player2.y) {
 					doublea = true;
 					g.fillPolygon(new int[] {xPointsLeft[0]-tileSize-marginSize, xPointsLeft[1]-tileSize-marginSize, xPointsLeft[2]-tileSize-marginSize}, yPointsLeft, highlightupa1);
 				} else
-					g.fillPolygon(xPointsLeft, yPointsLeft, highlightupa1);
+					if (!wa1)
+						g.fillPolygon(xPointsLeft, yPointsLeft, highlightupa1);
 				if (Player2.x - Player1.x == tileSize+marginSize && Player1.y == Player2.y) {
 					doubled = true;
 					g.fillPolygon(new int[] {xPointsRight[0]+tileSize+marginSize, xPointsRight[1]+tileSize+marginSize, xPointsRight[2]+tileSize+marginSize}, yPointsRight, highlightupd1);
 				} else
-					g.fillPolygon(xPointsRight, yPointsRight, highlightupd1);
+					if (!wd1)
+						g.fillPolygon(xPointsRight, yPointsRight, highlightupd1);
 
 				
 				if (highlightups1 > 0) { // if world doesn't end
@@ -385,7 +423,8 @@ public class Game extends JPanel {
 						if (!highds1)
 							moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 					} else
-						moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+						if (!ws1)
+							moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				}
 				if (highlightupw1 > 0) {
 					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
@@ -395,23 +434,30 @@ public class Game extends JPanel {
 						if (!highdw1)
 							moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 					} else
-						moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+						if (!ww1)
+							moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				}
 				int tile_x = (int) Math.ceil((Player1.x - tileSize - marginSize) / (tileSize+marginSize));
 				int tile_y = (int) Math.ceil((Player1.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
 				if (doublea)
 					tile_x -= 1;
-				moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				if (!wa1)
+					moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				tile_x = (int) Math.ceil((Player1.x + tileSize + marginSize) / (tileSize+marginSize));
 				tile_y = (int) Math.ceil((Player1.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
 				if (doubled)
 					tile_x += 1;
-				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				if (!wd1)
+					moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 
 				highdw1 = false;
 				highda1 = false;
 				highds1 = false;
 				highdd1 = false;
+				ww1 = false;
+				wa1 = false;
+				ws1 = false;
+				wd1 = false;
 			}
 
 			
@@ -427,25 +473,29 @@ public class Game extends JPanel {
 					if (!highdw2)
 						g.fillPolygon(xPointsUp2, new int[] {yPointsUp2[0]-tileSize-marginSize, yPointsUp2[1]-tileSize-marginSize, yPointsUp2[2]-tileSize-marginSize}, highlightupw2);
 				} else
-					g.fillPolygon(xPointsUp2, yPointsUp2, highlightupw2);
+					if (!ww2)
+						g.fillPolygon(xPointsUp2, yPointsUp2, highlightupw2);
 				if (Player1.y - Player2.y == tileSize+marginSize && Player1.x == Player2.x) {
 					doubles2 = true;
 					if (!highds2)
 						g.fillPolygon(xPointsDown2, new int[] {yPointsDown2[0]+tileSize+marginSize, yPointsDown2[1]+tileSize+marginSize, yPointsDown2[2]+tileSize+marginSize}, highlightups2);
 				} else
-					g.fillPolygon(xPointsDown2, yPointsDown2, highlightups2);
+					if (!ws2)
+						g.fillPolygon(xPointsDown2, yPointsDown2, highlightups2);
 				if (Player2.x - Player1.x == tileSize+marginSize && Player1.y == Player2.y) {
 					doublea2 = true;
 					if (!highda2)
 						g.fillPolygon(new int[] {xPointsLeft2[0]-tileSize-marginSize, xPointsLeft2[1]-tileSize-marginSize, xPointsLeft2[2]-tileSize-marginSize}, yPointsLeft2, highlightupa2);
 				} else
-					g.fillPolygon(xPointsLeft2, yPointsLeft2, highlightupa2);
+					if (!wa2)
+						g.fillPolygon(xPointsLeft2, yPointsLeft2, highlightupa2);
 				if (Player1.x - Player2.x == tileSize+marginSize && Player1.y == Player2.y) {
 					doubled2 = true;
 					if (!highdd2)
 						g.fillPolygon(new int[] {xPointsRight2[0]+tileSize+marginSize, xPointsRight2[1]+tileSize+marginSize, xPointsRight2[2]+tileSize+marginSize}, yPointsRight2, highlightupd2);
 				} else
-					g.fillPolygon(xPointsRight2, yPointsRight2, highlightupd2);
+					if (!wd2)
+						g.fillPolygon(xPointsRight2, yPointsRight2, highlightupd2);
 				if (highlightups2 > 0) {
 					int tile_x = (int) Math.ceil(Player2.x / (tileSize+marginSize));
 					int tile_y = (int) Math.ceil((Player2.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
@@ -454,7 +504,8 @@ public class Game extends JPanel {
 						if (!highds2) 
 							moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 					} else
-						moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+						if (!ws2)
+							moves.set(2, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 
 				}
 				if (highlightupw2 > 0) {
@@ -465,23 +516,31 @@ public class Game extends JPanel {
 						if (highdw2)
 							moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 					} else
-						moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+						if (!ww2)
+							moves.set(0, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				}
 				int tile_x = (int) Math.ceil((Player2.x - tileSize - marginSize) / (tileSize+marginSize));
 				int tile_y = (int) Math.ceil((Player2.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
 				if (doublea2) 
 					tile_x -= 1;
-				moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				if (!wa2)
+					moves.set(1, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 				tile_x = (int) Math.ceil((Player2.x + tileSize + marginSize) / (tileSize+marginSize));
 				tile_y = (int) Math.ceil((Player2.y-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
 				if (doubled2) 
 					tile_x += 1;
-				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
+				if (!wd2)
+					moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 
 				highdw2 = false;
 				highda2 = false;
 				highds2 = false;
 				highdd2 = false;
+
+				ww2 = false;
+				wa2 = false;
+				ws2 = false;
+				wd2 = false;
 			}	
 		}		
 	}
@@ -500,7 +559,6 @@ public class Game extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setBackground(Color.BLACK);frame.addComponentListener(new ComponentListener() {
 		    public void componentResized(ComponentEvent e) {
-		    	System.out.println("resize");
 		        rescale = true;    
 		    }
 			@Override
