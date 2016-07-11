@@ -58,6 +58,7 @@ public class Game extends JPanel {
     static Point pointStart = null;
     static Point pointEnd = null;
     public boolean gameOver = false;
+    private ArrayList<ArrayList<Integer>> allCenters = new ArrayList<ArrayList<Integer>>();
     
 	public ArrayList<String> moves = new ArrayList<String>(); // current available moves defined by triangles
 	// variables to permit double jump
@@ -85,6 +86,16 @@ public class Game extends JPanel {
 		return new Rectangle(0, 0, getWidth(), (getHeight()-getWidth())/2);
 	}*/ 
 	private static boolean rescale = false;
+	
+	private ArrayList<Integer> wallCenter(ArrayList<Integer> wall) {
+		if (wall.get(0) == wall.get(2)) {
+			return new ArrayList<Integer>(Arrays.asList(wall.get(0), (wall.get(1)+wall.get(3))/2));
+		}
+		else {
+			return new ArrayList<Integer>(Arrays.asList((wall.get(0)+wall.get(2))/2, wall.get(1)));
+		}
+	}
+	
 	private void Rescale() {
 			// get current locations
 			int currentx1 = Player1.x;
@@ -300,6 +311,13 @@ public class Game extends JPanel {
             g2d.setStroke(new BasicStroke(tileSize/15));
             g.fillRect(getWidth()-(int) Math.ceil(tileSize/2.6) - tileSize/2, getHeight()-x*tileSize/4-tileSize/4 - tileSize/8, tileSize/2, tileSize/8);
 		}
+		for (int x = 0; x < walls1.size(); x++) {
+			allCenters.add(wallCenter(walls1.get(x)));
+		}
+		for (int x = 0; x < walls2.size(); x++) {
+			allCenters.add(wallCenter(walls2.get(x)));
+		}
+		
         if (wall.walltoggle % 2 != 0) {
         	
 			if (pointStart != null) {
@@ -310,36 +328,46 @@ public class Game extends JPanel {
 	            g.drawLine(pointStart.x* (tileSize+marginSize)-2, pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2, pointEnd.x, pointEnd.y); // draw unfinished walls
 	            
 	            // add correct walls to array
+	            if (pointEnd.y >= (getHeight()-getWidth())/2-10 && pointEnd.y <= (getHeight()-getWidth())/2 + getWidth()+10) {
 	            if (Math.abs(pointStart.x*(tileSize+marginSize)-2 - pointEnd.x) <= 5 && Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2-pointEnd.y) >= tileSize*2+marginSize) {
 	            	if (pointEnd.y > pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2) {
-	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
-	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
+	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2))))) {
+		            		if (turn.onePlaysNext)
+		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
+		            		else
+		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
+		            	}
 	            	} else {
-	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
-	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
+	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2))))) {
+		            		if (turn.onePlaysNext)
+		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
+		            		else
+		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
+	            		}
 	            	}
 	            	mml.Start = null;
 	            	pointStart = null;
 	            } else if (Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2 - pointEnd.y) <= 5 && Math.abs(pointStart.x* (tileSize+marginSize)-2-pointEnd.x) >= tileSize*2+marginSize) {
 	            	if (pointEnd.x > pointStart.x* (tileSize+marginSize)-2) {
-	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
-	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
-
+	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x  + 2, pointStart.y))))) {
+		            		if (turn.onePlaysNext)
+		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
+		            		else
+		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
+	            		}
 	            	} else {
-	            		if (turn.onePlaysNext)
-	            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
-	            		else
-	            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
+	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y))))) {
+
+		            		if (turn.onePlaysNext)
+		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
+		            		else
+		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
+		            	}
 	            	}
 	            	mml.Start = null; // stop drawing
 	            	pointStart = null;
 	            }
+				}
 				}
 	        }
         }
