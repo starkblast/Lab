@@ -45,7 +45,7 @@ public class Game extends JPanel{
 	public int highlightupd2;
 
     static Point pointStart = null;
-    static Point pointEnd   = null;
+    static Point pointEnd = null;
 	public ArrayList<String> moves = new ArrayList<String>();
 
 	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
@@ -328,8 +328,7 @@ public class Game extends JPanel{
 		frame = new JFrame("Labyrinth cancer game");
 		frame.getContentPane().addMouseListener(mml);
 		frame.getContentPane().add(new Game());
-		frame.addMouseListener(mml);
-		frame.addMouseMotionListener(mml2);
+		frame.getContentPane().addMouseMotionListener(mml2);
 		Game game = new Game();
 		frame.setSize(376, 616);
 		frame.setVisible(true);
@@ -341,6 +340,13 @@ public class Game extends JPanel{
 			if (mml.lastclicked != "") {
 				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
+			}
+			if (mml.Start != null) {
+				pointStart = mml.Start;
+				mml.Start = null;
+			}
+			if (mml2.pointEnd != null) {
+				pointEnd = mml2.pointEnd;
 			}
 			Thread.sleep(10);
 		}
