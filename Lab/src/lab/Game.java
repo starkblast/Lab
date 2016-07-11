@@ -43,7 +43,9 @@ public class Game extends JPanel{
     static Point pointStart = null;
     static Point pointEnd   = null;
 	public ArrayList<String> moves = new ArrayList<String>();
-	public ArrayList<ArrayList<Integer>> walls = new ArrayList<ArrayList<Integer>>();
+	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
+	public ArrayList<ArrayList<Integer>> walls2 = new ArrayList<ArrayList<Integer>>();
+
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	/*public Rectangle getBounds() { // collider
@@ -157,28 +159,37 @@ public class Game extends JPanel{
 		Player2.paint(g2d);
 		wall.paint(g2d);
 		// DRAW WALLS
-		for (int x = 0; x < walls.size(); x++) {
+		for (int x = 0; x < walls1.size(); x++) {
             g.setColor(Color.decode(wall.wallmarkercolor));
             g2d.setStroke(new BasicStroke(tileSize/6));
-			g.drawLine(walls.get(x).get(0), walls.get(x).get(1), walls.get(x).get(2), walls.get(x).get(3));
+			g.drawLine(walls1.get(x).get(0), walls1.get(x).get(1), walls1.get(x).get(2), walls1.get(x).get(3));
+		}
+		for (int x = 0; x < walls2.size(); x++) {
+            g.setColor(Color.decode(wall.wallmarkercolor));
+            g2d.setStroke(new BasicStroke(tileSize/6));
+			g.drawLine(walls2.get(x).get(0), walls2.get(x).get(1), walls2.get(x).get(2), walls2.get(x).get(3));
 		}
         if (wall.walltoggle % 2 != 0) {
+        	/*if (turn.onePlaysNext) {
+        		walls
+        	}*/
+        	
 			if (pointStart != null) {
 	            g.setColor(Color.decode(wall.wallmarkercolor));
 	            g2d.setStroke(new BasicStroke(tileSize/6));
 	            g.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
 	            if (Math.abs(pointStart.x - pointEnd.x) <= 5 && Math.abs(pointStart.y-pointEnd.y) >= tileSize*2+marginSize) {
-	            	if (pointEnd.y > pointStart.y)
-	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + tileSize*2+marginSize)));
-	            	else
-	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - tileSize*2-marginSize)));
+	            	if (pointEnd.y > pointStart.y) {
+	            		walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + tileSize*2+marginSize)));
+	            	} else
+	            		walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - tileSize*2-marginSize)));
 	            	mml.Start = null;
 	            	pointStart = null;
 	            } else if (Math.abs(pointStart.y - pointEnd.y) <= 5 && Math.abs(pointStart.x-pointEnd.x) >= tileSize*2+marginSize) {
 	            	if (pointEnd.x > pointStart.x)
-	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + tileSize*2+marginSize, pointStart.y)));
+	            		walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + tileSize*2+marginSize, pointStart.y)));
 	            	else
-	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - tileSize*2-marginSize, pointStart.y)));
+	            		walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - tileSize*2-marginSize, pointStart.y)));
 	            	mml.Start = null;
 	            	pointStart = null;
 	            }

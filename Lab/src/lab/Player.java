@@ -19,6 +19,8 @@ public class Player {
 	int xa = 1;
 	int ya = 1;
 	int i;
+	int wallsRemaining = 10;
+	
 	boolean first = true;
 	public Game game;
 
