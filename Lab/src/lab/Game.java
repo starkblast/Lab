@@ -1,17 +1,22 @@
 package lab;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,6 +43,9 @@ public class Game extends JPanel{
 	public int highlightupa2;
 	public int highlightups2;
 	public int highlightupd2;
+
+    static Point pointStart = null;
+    static Point pointEnd   = null;
 	public ArrayList<String> moves = new ArrayList<String>();
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
@@ -49,6 +57,8 @@ public class Game extends JPanel{
 	Turn turn = new Turn(this);
 	Wall wall = new Wall(this);
 	static Mouse mml = new Mouse();
+	static MotionMouse mml2 = new MotionMouse();
+
 	
 	/*public void move() {
 		Player1.move();
@@ -275,6 +285,8 @@ public class Game extends JPanel{
 		frame = new JFrame("Labyrinth cancer game");
 		frame.getContentPane().addMouseListener(mml);
 		frame.getContentPane().add(new Game());
+		frame.addMouseListener(mml);
+		frame.addMouseMotionListener(mml2);
 		Game game = new Game();
 		frame.setSize(376, 616);
 		frame.setVisible(true);
