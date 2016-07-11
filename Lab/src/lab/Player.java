@@ -78,7 +78,7 @@ public class Player {
 			g.setColor(Color.decode(game.player1color));
 			
 		} else { // checks if world ends next to player 2
-			if (y<=(game.getHeight()-game.getWidth())/2) { 
+			if (y<=( game.getHeight()-game.getWidth())/2 +5) { 
 				game.highlightupw2 = 0;
 			} else if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8) {
 				game.highlightups2 = 0;

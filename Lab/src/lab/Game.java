@@ -5,6 +5,7 @@ package lab;
 // you just need to believe
 
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 
 import java.awt.Graphics;
@@ -26,6 +27,11 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+/*import lab.Player;
+import lab.MotionMouse;
+import lab.Mouse;
+import lab.Wall;
+import lab.Turn;*/
 
 public class Game extends JPanel {
 	
@@ -102,24 +108,25 @@ public class Game extends JPanel {
 			int currenty1 = Player1.y;
 			int currentx2 = Player2.x;
 			int currenty2 = Player2.y;
-			int tile_x1 = (int) Math.ceil(currentx1 / (tileSize+marginSize));
-			int tile_y1 = (int) Math.ceil((currenty1-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
-			int tile_x2 = (int) Math.ceil(currentx2 / (tileSize+marginSize));
-			int tile_y2 = (int) Math.ceil((currenty2-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
-			// rescale to same position
-			if (tile_y1 > -1 && tile_y2 > -1) {
-				Player1.y = ((getHeight()-getWidth())/2 + (tileSize+marginSize)*tile_y1 + tileSize/8);
-				Player1.x = (tileSize+marginSize)*(tile_x1) + (tileSize/8);
-				Player2.y = ((getHeight()-getWidth())/2 + (tileSize+marginSize)*tile_y2 + tileSize/8);
-				Player2.x = (tileSize+marginSize)*(tile_x2) + (tileSize/8);
-			} else { // set to default locations
-					Player1.y = ((getHeight()-getWidth())/2 + tileSize/8);
-					Player1.x = getWidth() /2 - (tileSize-10)/2;
-					Player2.y = ((getHeight()-getWidth())/2 + getWidth()) - tileSize + tileSize/8;
-					Player2.x = getWidth() /2- (tileSize-10)/2;
+			if (tileSize != 0 && marginSize != 0) {
+				int tile_x1 = (int) Math.ceil(currentx1 / (tileSize+marginSize));
+				int tile_y1 = (int) Math.ceil((currenty1-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				int tile_x2 = (int) Math.ceil(currentx2 / (tileSize+marginSize));
+				int tile_y2 = (int) Math.ceil((currenty2-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
+				// rescale to same position
+				if (tile_y1 > -1 && tile_y2 > -1) {
+					Player1.y = ((getHeight()-getWidth())/2 + (tileSize+marginSize)*tile_y1 + tileSize/8);
+					Player1.x = (tileSize+marginSize)*(tile_x1) + (tileSize/8);
+					Player2.y = ((getHeight()-getWidth())/2 + (tileSize+marginSize)*tile_y2 + tileSize/8);
+					Player2.x = (tileSize+marginSize)*(tile_x2) + (tileSize/8);
+				} else { // set to default locations
+						Player1.y = ((getHeight()-getWidth())/2 + tileSize/8);
+						Player1.x = getWidth() /2 - (tileSize-10)/2;
+						Player2.y = ((getHeight()-getWidth())/2 + getWidth()) - tileSize + tileSize/8;
+						Player2.x = getWidth() /2- (tileSize-10)/2;
+				}
+				rescale = false;
 			}
-			rescale = false;
-			
 	}
 	
 	// returns all walls with size tileSize
@@ -311,12 +318,7 @@ public class Game extends JPanel {
             g2d.setStroke(new BasicStroke(tileSize/15));
             g.fillRect(getWidth()-(int) Math.ceil(tileSize/2.6) - tileSize/2, getHeight()-x*tileSize/4-tileSize/4 - tileSize/8, tileSize/2, tileSize/8);
 		}
-		for (int x = 0; x < walls1.size(); x++) {
-			allCenters.add(wallCenter(walls1.get(x)));
-		}
-		for (int x = 0; x < walls2.size(); x++) {
-			allCenters.add(wallCenter(walls2.get(x)));
-		}
+		
 		
         if (wall.walltoggle % 2 != 0) {
         	
@@ -329,7 +331,15 @@ public class Game extends JPanel {
 	            
 	            // add correct walls to array
 	            if (pointEnd.y >= (getHeight()-getWidth())/2-10 && pointEnd.y <= (getHeight()-getWidth())/2 + getWidth()+10) {
-	            if (Math.abs(pointStart.x*(tileSize+marginSize)-2 - pointEnd.x) <= 5 && Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2-pointEnd.y) >= tileSize*2+marginSize) {
+
+        		// get centers of walls to check whether walls cross each other
+        		for (int x = 0; x < walls1.size(); x++) {
+        			allCenters.add(wallCenter(walls1.get(x)));
+        		}
+        		for (int x = 0; x < walls2.size(); x++) {
+        			allCenters.add(wallCenter(walls2.get(x)));
+        		}
+	            	if (Math.abs(pointStart.x*(tileSize+marginSize)-2 - pointEnd.x) <= 5 && Math.abs(pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2-pointEnd.y) >= tileSize*2+marginSize) {
 	            	if (pointEnd.y > pointStart.y*(tileSize+marginSize)+((getHeight()-getWidth())/2)-2) {
 	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2))))) {
 		            		if (turn.onePlaysNext)
@@ -501,8 +511,9 @@ public class Game extends JPanel {
 					if (!highdw2)
 						g.fillPolygon(xPointsUp2, new int[] {yPointsUp2[0]-tileSize-marginSize, yPointsUp2[1]-tileSize-marginSize, yPointsUp2[2]-tileSize-marginSize}, highlightupw2);
 				} else
-					if (!ww2)
+					if (!ww2) {
 						g.fillPolygon(xPointsUp2, yPointsUp2, highlightupw2);
+					}
 				if (Player1.y - Player2.y == tileSize+marginSize && Player1.x == Player2.x) {
 					doubles2 = true;
 					if (!highds2)
@@ -606,10 +617,10 @@ public class Game extends JPanel {
 				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
 			}
-			if (mml.Start != null) {
+			//if (mml.Start != null) {
 				pointStart = mml.Start;
-				mml.Start = null;
-			}
+				//mml.Start = null;
+			//}
 			if (mml2.pointEnd != null) {
 				pointEnd = mml2.pointEnd;
 			}

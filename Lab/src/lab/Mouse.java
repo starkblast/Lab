@@ -86,7 +86,7 @@ class Mouse implements MouseListener {
 		int marginSize = (int) Math.ceil(tileSize / 20);
 		int tile_x = (int) Math.ceil(x / (tileSize+marginSize));
 		int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize))+1;
-		if (Math.abs(tile_x * (tileSize+marginSize) - x) <= 10 && tile_y * (tileSize + marginSize) - ((height-width)/2) - y <= 10) {
+		if (Math.abs(tile_x * (tileSize) + (tile_x-1) * marginSize - x) <= 15 && tile_y * (tileSize) + (tile_y-1) * marginSize - ((height-width)/2) - y <= 15) {
 			if (y > (height-width)/2 && y < (height-width)/2 + width)
 				Start = new Point(tile_x, tile_y);
 				//Start = new Point(tile_x * (tileSize+marginSize)-2, tile_y*(tileSize+marginSize)+((height-width)/2)-2);
