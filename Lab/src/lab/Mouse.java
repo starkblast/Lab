@@ -4,9 +4,16 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+
+
 import java.awt.Color;
 import java.awt.Robot;
 import java.awt.AWTException;
@@ -23,6 +30,7 @@ class Mouse implements MouseListener {
 	private int width;
 	private int height;
 	public String lastclicked;
+	public Point Start = null;
 	
 	public void getPlayerPosition(int x1, int y1, int x2, int y2, int width, int height) {
 		this.x1 = x1;
@@ -77,7 +85,6 @@ class Mouse implements MouseListener {
 		} 
 		
 	}
-	
 	@Override
 	public void mouseEntered(MouseEvent arg0) { 
 	}
@@ -89,11 +96,13 @@ class Mouse implements MouseListener {
 	
 	@Override
 	public void mousePressed(MouseEvent arg0) {
+		Start = arg0.getPoint();
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-
-}
+		Start = null;
+	}
+  
 
 }

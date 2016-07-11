@@ -1,17 +1,22 @@
 package lab;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -34,7 +39,11 @@ public class Game extends JPanel{
 	public int highlightupw2;
 	public int highlightups1;
 	public int highlightups2;
+
+    static Point pointStart = null;
+    static Point pointEnd   = null;
 	public ArrayList<String> moves = new ArrayList<String>();
+	public ArrayList<ArrayList<Integer>> walls = new ArrayList<ArrayList<Integer>>();
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
 	/*public Rectangle getBounds() { // collider
@@ -44,7 +53,10 @@ public class Game extends JPanel{
 	Player Player2 = new Player(this, 2);
 	Turn turn = new Turn(this);
 	Wall wall = new Wall(this);
+	
 	static Mouse mml = new Mouse();
+	static MotionMouse mml2 = new MotionMouse();
+
 	
 	/*public void move() {
 		Player1.move();
@@ -144,6 +156,34 @@ public class Game extends JPanel{
 		Player1.paint(g2d);
 		Player2.paint(g2d);
 		wall.paint(g2d);
+		// DRAW WALLS
+		for (int x = 0; x < walls.size(); x++) {
+            g.setColor(Color.decode(wall.wallmarkercolor));
+            g2d.setStroke(new BasicStroke(tileSize/6));
+			g.drawLine(walls.get(x).get(0), walls.get(x).get(1), walls.get(x).get(2), walls.get(x).get(3));
+		}
+        if (wall.walltoggle % 2 != 0) {
+			if (pointStart != null) {
+	            g.setColor(Color.decode(wall.wallmarkercolor));
+	            g2d.setStroke(new BasicStroke(tileSize/6));
+	            g.drawLine(pointStart.x, pointStart.y, pointEnd.x, pointEnd.y);
+	            if (Math.abs(pointStart.x - pointEnd.x) <= 5 && Math.abs(pointStart.y-pointEnd.y) >= tileSize*2+marginSize) {
+	            	if (pointEnd.y > pointStart.y)
+	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + tileSize*2+marginSize)));
+	            	else
+	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - tileSize*2-marginSize)));
+	            	mml.Start = null;
+	            	pointStart = null;
+	            } else if (Math.abs(pointStart.y - pointEnd.y) <= 5 && Math.abs(pointStart.x-pointEnd.x) >= tileSize*2+marginSize) {
+	            	if (pointEnd.x > pointStart.x)
+	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + tileSize*2+marginSize, pointStart.y)));
+	            	else
+	            		walls.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - tileSize*2-marginSize, pointStart.y)));
+	            	mml.Start = null;
+	            	pointStart = null;
+	            }
+	        }
+        }
 		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2, getWidth(), getHeight());
 		repaint();
 		
@@ -219,7 +259,9 @@ public class Game extends JPanel{
 	public static void main(String[] args) throws InterruptedException {
 		frame = new JFrame("Labyrinth cancer game");
 		frame.addMouseListener(mml);
-		frame.add(new Game());
+		frame.addMouseMotionListener(mml2);
+
+		frame.getContentPane().add(new Game());
 		Game game = new Game();
 		frame.setSize(376, 616);
 		frame.setVisible(true);
@@ -231,6 +273,13 @@ public class Game extends JPanel{
 			if (mml.lastclicked != "") {
 				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
+			}
+			if (mml.Start != null) {
+				pointStart = mml.Start;
+				mml.Start = null;
+			}
+			if (mml2.pointEnd != null) {
+				pointEnd = mml2.pointEnd;
 			}
 			Thread.sleep(10);
 		}
