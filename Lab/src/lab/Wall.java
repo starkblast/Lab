@@ -41,7 +41,16 @@ public class Wall {
 				for (l = 0; l < 8; l++ ) {
 					g2d.setColor(Color.decode(wallmarkercolor));
 					g2d.fillOval(game.tileSize + w * (game.tileSize + game.marginSize) - markersize/2 + 1/*extra pixel for comfort of eyes*/ , (game.getHeight()-game.getWidth())/2 + game.tileSize + l*(game.tileSize + game.marginSize)-markersize/2,markersize,markersize);
-					//System.out.println("jah");
+					game.highlightupw1 = 0;
+					game.highlightupa1 = 0;
+					game.highlightups1 = 0;
+					game.highlightupd1 = 0;
+					
+					game.highlightupw2 = 0;
+					game.highlightupa2 = 0;
+					game.highlightups2 = 0;
+					game.highlightupd2 = 0;
+					
 				}
 			}
 		

@@ -31,9 +31,13 @@ public class Game extends JPanel{
 	public int tileSize;  //tile size: getWidth() / 9.45
 	public int marginSize;
 	public int highlightupw1;
-	public int highlightupw2;
+	public int highlightupa1;
 	public int highlightups1;
+	public int highlightupd1;
+	public int highlightupw2;
+	public int highlightupa2;
 	public int highlightups2;
+	public int highlightupd2;
 	public ArrayList<String> moves = new ArrayList<String>();
 	public static JFrame frame;//margin size: (getWidth() - (getWidth() / 9.45)) / 8
 	
@@ -116,10 +120,15 @@ public class Game extends JPanel{
 		}
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
 		marginSize = (int) Math.ceil(tileSize / 20);
-		highlightupw1 = tileSize - 10;
-		highlightupw2 = tileSize - 10;
-		highlightups1 = tileSize - 10;
-		highlightups2 = tileSize - 10;
+		highlightupw1 = 3;
+		highlightupa1 = 3;
+		highlightups1 = 3;
+		highlightupd1 = 3;
+		
+		highlightupw2 = 3;
+		highlightupa2 = 3;
+		highlightups2 = 3;
+		highlightupd2 = 3;
 		
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setColor(Color.decode(gridbackgroundcolor));	
@@ -147,7 +156,35 @@ public class Game extends JPanel{
 		mml.getPlayerPosition(Player1.x+(tileSize-10)/2, Player1.y+(tileSize-10)/2, Player2.x+(tileSize-10)/2, Player2.y+(tileSize-10)/2, getWidth(), getHeight());
 		repaint();
 		
+		
 		//HIGHLIGHTS
+		// trianglehighlights
+		
+		
+		int[] xPointsUp = {Player1.x + 8, Player1.x + (tileSize - 10 )/2,Player1.x + tileSize - 18}; //triangle
+		int[] yPointsUp = {Player1.y - marginSize - 10 - tileSize/10,Player1.y - marginSize - tileSize/2 - marginSize,Player1.y - marginSize - 10 - tileSize/10};
+		
+		int[] xPointsRight = {Player1.x + tileSize + marginSize + tileSize/10,Player1.x + tileSize + marginSize + tileSize/10 ,Player1.x + tileSize + (tileSize-10)/2}; //triangle
+		int[] yPointsRight = {Player1.y + 8,Player1.y + tileSize - 18, Player1.y + (tileSize-10)/2};
+		
+		int[] xPointsDown = {Player1.x + 8, Player1.x + (tileSize - 10 )/2,Player1.x + tileSize - 18}; //triangle
+		int[] yPointsDown = {Player1.y + marginSize + tileSize/10 + tileSize ,Player1.y + tileSize + marginSize + tileSize/2 + marginSize - 10 ,Player1.y + marginSize + tileSize + tileSize/10};
+		
+		int[] xPointsLeft = {Player1.x - 8 - tileSize/10 - marginSize,Player1.x - 8 - tileSize/10 - marginSize ,Player1.x - 8 - marginSize - (tileSize-10)/2}; //triangle
+		int[] yPointsLeft = {Player1.y + 8,Player1.y + tileSize - 18, Player1.y + (tileSize-10)/2};	
+		
+		int[] xPointsUp2 = {Player2.x + 8, Player2.x + (tileSize - 10 )/2,Player2.x + tileSize - 18}; //triangle
+		int[] yPointsUp2 = {Player2.y - marginSize - 10 - tileSize/10,Player2.y - marginSize - tileSize/2 - marginSize,Player2.y - marginSize - 10 - tileSize/10};
+		
+		int[] xPointsRight2 = {Player2.x + tileSize + marginSize + tileSize/10,Player2.x + tileSize + marginSize + tileSize/10 ,Player2.x + tileSize + (tileSize-10)/2}; //triangle
+		int[] yPointsRight2 = {Player2.y + 8,Player2.y + tileSize - 18, Player2.y + (tileSize-10)/2};
+		
+		int[] xPointsDown2 = {Player2.x + 8, Player2.x + (tileSize - 10 )/2,Player2.x + tileSize - 18}; //triangle
+		int[] yPointsDown2 = {Player2.y + marginSize + tileSize/10 + tileSize ,Player2.y + tileSize + marginSize + tileSize/2 + marginSize - 10 ,Player2.y + marginSize + tileSize + tileSize/10};
+		
+		int[] xPointsLeft2 = {Player2.x - 8 - tileSize/10 - marginSize,Player2.x - 8 - tileSize/10 - marginSize ,Player2.x - 8 - marginSize - (tileSize-10)/2}; //triangle
+		int[] yPointsLeft2 = {Player2.y + 8,Player2.y + tileSize - 18, Player2.y + (tileSize-10)/2};	
+		
 		if (turn.onePlaysNext == true) { //Player 1 turn
 			if(Player1.i == 1) {
 				moves = new ArrayList<String>();
@@ -155,17 +192,25 @@ public class Game extends JPanel{
 					moves.add("");
 				// bug: lisab arraysse default asukoha, arvestamata, et vb on kaugemal
 				g2d.setColor(Color.decode(highlightcolor));
+				
+
 				if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
-					g2d.fillRect(Player1.x, Player1.y - tileSize*2 - marginSize*2, highlightupw1, highlightupw1); //playerist ülespoole
+					
+					
+				 	//g.fillPolygon(Player1.x, Player1.y, Player1.x + tileSize/2, Player1.y - marginSize - tileSize/2 , Player1.x + tileSize, Player1.y );
+					//g2d.fillRect(Player1.x, Player1.y - tileSize*2 - marginSize*2, highlightupw1, highlightupw1); //playerist ülespoole
 				} else
-					g2d.fillRect(Player1.x, Player1.y - tileSize - marginSize, highlightupw1, highlightupw1); //playerist ülespoole
+				g.fillPolygon(xPointsUp, yPointsUp, highlightupw1);
+					//g2d.fillRect(Player1.x, Player1.y - tileSize - marginSize, highlightupw1, highlightupw1); //playerist ülespoole
 				//if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
 					//g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
 				//} else	
-					g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
-
-				g2d.fillRect(Player1.x - tileSize - marginSize, Player1.y, tileSize-10, tileSize-10); //playerist vasakule
-				g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
+				g.fillPolygon(xPointsDown, yPointsDown, highlightups1);
+					//g2d.fillRect(Player1.x, Player1.y+ tileSize + marginSize, highlightups1, highlightups1); // playerist allapoole
+				g.fillPolygon(xPointsLeft, yPointsLeft, highlightupa1);
+				//g2d.fillRect(Player1.x - tileSize - marginSize, Player1.y, tileSize-10, tileSize-10); //playerist vasakule
+				g.fillPolygon(xPointsRight, yPointsRight, highlightupd1);
+				//g2d.fillRect(Player1.x + tileSize + marginSize, Player1.y, tileSize-10, tileSize-10); //playerist paremale
 				if (highlightups1 > 0) {
 					int tile_x = (int) Math.ceil(Player1.x / (tileSize+marginSize));
 					int tile_y = (int) Math.ceil((Player1.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
@@ -184,18 +229,26 @@ public class Game extends JPanel{
 				moves.set(3, Integer.toString(tile_x) + " " + Integer.toString(tile_y));
 
 			}
+
 			
 		} else { //Player 2 turn
 			if (Player2.i != 1) {
 				g2d.setColor(Color.decode(highlightcolor));
 				if (Math.abs(Player1.y - Player2.y) == tileSize+marginSize && Player1.x == Player2.y) {
-					g2d.fillRect(Player2.x, Player2.y + tileSize*2 + marginSize*2, highlightupw2, highlightupw2); //playerist ülespoole
+					//g2d.fillRect(Player2.x, Player2.y + tileSize*2 + marginSize*2, highlightupw2, highlightupw2); //playerist ülespoole
+				
 				} else
-					g2d.fillRect(Player2.x, Player2.y + tileSize + marginSize, highlightupw2, highlightupw2); //playerist ülespoole
+				g.fillPolygon(xPointsUp2, yPointsUp2, highlightupw2);
+					//g2d.fillRect(Player2.x, Player2.y + tileSize + marginSize, highlightupw2, highlightupw2); //playerist ülespoole
+				g.fillPolygon(xPointsDown2, yPointsDown2, highlightups2);
 				//g2d.fillRect(Player2.x, Player2.y+ tileSize + marginSize, highlightups2, highlightups2); // playerist allapoole
-				g2d.fillRect(Player2.x + tileSize + marginSize, Player2.y, tileSize-10, tileSize-10); //playerist paremale
-				g2d.fillRect(Player2.x - tileSize - marginSize, Player2.y, tileSize-10, tileSize-10); //playerist vasakule
-				g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); //playerist ülespoole
+				g.fillPolygon(xPointsRight2, yPointsRight2, highlightupd2);
+				//g2d.fillRect(Player2.x + tileSize + marginSize, Player2.y, tileSize-10, tileSize-10); //playerist paremale
+				g.fillPolygon(xPointsLeft2, yPointsLeft2, highlightupa2);
+						
+				//g2d.fillRect(Player2.x - tileSize - marginSize, Player2.y, tileSize-10, tileSize-10); //playerist vasakule
+				//g.fillPolygon(xPointsUp, yPointsUp, 3);
+				//g2d.fillRect(Player2.x, Player2.y - tileSize - marginSize, highlightupw2, highlightupw2); //playerist ülespoole
 				if (highlightups2 > 0) {
 					int tile_x = (int) Math.ceil(Player2.x / (tileSize+marginSize));
 					int tile_y = (int) Math.ceil((Player2.y+ tileSize + marginSize-((getHeight()-getWidth())/2)) / (tileSize+marginSize));
@@ -216,10 +269,12 @@ public class Game extends JPanel{
 		}		
 	}
 	
+
+	
 	public static void main(String[] args) throws InterruptedException {
 		frame = new JFrame("Labyrinth cancer game");
-		frame.addMouseListener(mml);
-		frame.add(new Game());
+		frame.getContentPane().addMouseListener(mml);
+		frame.getContentPane().add(new Game());
 		Game game = new Game();
 		frame.setSize(376, 616);
 		frame.setVisible(true);
