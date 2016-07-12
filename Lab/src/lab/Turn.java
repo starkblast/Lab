@@ -17,6 +17,7 @@ public class Turn {
 		if (onePlaysNext) {
 			game.player1 = "#8AAFAF";
 			game.player2 = "#8C4646";
+			game.hasmoved = false;
 			
 		}   
 		
@@ -24,6 +25,7 @@ public class Turn {
 		if (!onePlaysNext) {
 			game.player2 = "#AF7979";
 			game.player1 = "#588C7E";
+			game.hasmoved = false;
 		}
 	}
 }

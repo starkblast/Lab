@@ -28,6 +28,8 @@ class Mouse implements MouseListener {
 	private int height;
 	public String lastclicked;
 	public Point Start = null;
+	public boolean p1hasmovedtoggle = false;
+	public boolean p2hasmovedtoggle = false;
 	
 	public void getPlayerPosition(int x1, int y1, int x2, int y2, int width, int height) {
 		this.x1 = x1;
@@ -43,7 +45,9 @@ class Mouse implements MouseListener {
 
 		int x = arg0.getX();
 		int y = arg0.getY();
-
+		
+		
+		
 		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {   //player1 location
 			lastclicked = "player1";
 		}
@@ -59,13 +63,40 @@ class Mouse implements MouseListener {
 				int tile_y = (int) Math.ceil((y-((height-width)/2)) / (tileSize+marginSize));
 				lastclicked = Integer.toString(tile_x) + " " + Integer.toString(tile_y);
 			}
-			else if (y < (height-width)/2) { // checks if sides are clicked
+			if (p1hasmovedtoggle == true){
+				if (y < (height-width)/2 && x < width/2){  //player 1 confirm
+					lastclicked = "p1confirm";
+					
+				}
+				if (y < (height-width)/2 && x > width/2){ //player 1 cancel
+								lastclicked = "p1cancel";
+								
+				}
+			}
+						
+			if (p2hasmovedtoggle == true) {
+				if (y > (height-width)/2+width && x > width/2){ //player 2 confirm
+					lastclicked = "p2confirm";
+				}
+						
+				if (y > (height-width)/2+width && x < width/2){ //player 2 cancel
+					lastclicked = "p2cancel";
+					
+				}
+				
+				
+			}
+			
+			else if (p1hasmovedtoggle == false && p2hasmovedtoggle == false && y < (height-width)/2) { // checks if sides are clicked
 				lastclicked = "side1";
 			}
-			else if (y > (height-width)/2+width) {
+			else if (p1hasmovedtoggle == false && p2hasmovedtoggle == false && y > (height-width)/2+width) {
 				lastclicked = "side2";
 			}
 		} 
+		
+			
+	
 		
 	}
 	@Override

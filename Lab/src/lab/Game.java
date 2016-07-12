@@ -46,6 +46,8 @@ public class Game extends JPanel {
 	private String gridcolor = "#F2AE72";
 	private String gridbackgroundcolor ="#D96479";
 	private String highlightcolor ="#F2E394";
+	public String confirm ="#52BF90";
+	public String cancel ="#900C3F";
 	public int tileSize;  //tile size: getWidth() / 9.45
 	public int marginSize;
 	//public int previouswidth;
@@ -60,6 +62,7 @@ public class Game extends JPanel {
 	
 	//variables to check whether world ends after double jump
 	public boolean highdw1 = false, highda1 = false, highds1 = false, highdd1 = false,
+			
 			  	   highdw2 = false, highda2 = false, highds2 = false, highdd2 = false; 
     static Point pointStart = null;
     static Point pointEnd = null;
@@ -73,6 +76,32 @@ public class Game extends JPanel {
 	// variables that check presence of walls
 	public boolean ww1 = false, wa1 = false, ws1 = false, wd1 = false,
 		  	   	   ww2 = false, wa2 = false, ws2 = false, wd2 = false; 
+	
+	//booleans for if players have moved in a direction
+	public boolean hasmoved = false;
+	
+	public boolean p1hasmovedw = false;
+	public boolean p1hasmoveda = false;
+	public boolean p1hasmoveds = false;
+	public boolean p1hasmovedd = false;
+	
+	public boolean p2hasmovedw = false;
+	public boolean p2hasmoveda = false;
+	public boolean p2hasmoveds = false;
+	public boolean p2hasmovedd = false;
+	
+	public boolean p1hasmoveddoublew = false;
+	public boolean p1hasmoveddoublea = false;
+	public boolean p1hasmoveddoubles = false;
+	public boolean p1hasmoveddoubled = false;
+	
+	public boolean p2hasmoveddoublew = false;
+	public boolean p2hasmoveddoublea = false;
+	public boolean p2hasmoveddoubles = false;
+	public boolean p2hasmoveddoubled = false;
+	
+	public boolean p1toggleactivitypane = false;
+	public boolean p2toggleactivitypane = false;
 
 	
 	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
@@ -163,54 +192,102 @@ public class Game extends JPanel {
 	public void movePlayer(int i) { // moves player in direction defined by i
 		if (turn.onePlaysNext) {
 			if (i == 0) { 
-				if (doublew)
-					Player1.y = Player1.y - tileSize - marginSize- tileSize - marginSize;
-				else
-					Player1.y = Player1.y - tileSize - marginSize;
+				if (doublew) {
+					Player1.y = Player1.y - tileSize - marginSize- tileSize - marginSize; 
+					p1hasmoveddoublew = true;
+				}
+				else {
+					Player1.y = Player1.y - tileSize - marginSize; 
+					p1hasmovedw = true;
+				}
 			} else if (i == 1) {
-				if (doublea)
-					Player1.x = Player1.x - tileSize - marginSize - tileSize - marginSize;
-				else
+				if (doublea) {
+					Player1.x = Player1.x - tileSize - marginSize - tileSize - marginSize; 
+					p1hasmoveddoublea = true;
+				}
+				else {
 					Player1.x = Player1.x - tileSize - marginSize;
+					p1hasmoveda = true;
+				}
 			} else if (i == 2) {
-				if (doubles)
-					Player1.y = Player1.y + tileSize + marginSize + tileSize + marginSize;
-				else
-					Player1.y = Player1.y + tileSize + marginSize;
+				if (doubles) {
+					Player1.y = Player1.y + tileSize + marginSize + tileSize + marginSize; 
+					p1hasmoveddoubles = true;
+				}
+				else {
+					Player1.y = Player1.y + tileSize + marginSize; 
+					p1hasmoveds = true;
+					
+				}
 			} else if (i == 3) {
-				if (doubled)
-					Player1.x = Player1.x + tileSize + marginSize + tileSize + marginSize;
-				else
+				if (doubled) {
+					Player1.x = Player1.x + tileSize + marginSize + tileSize + marginSize; 
+					p1hasmoveddoubled = true;
+				}
+				else {
 					Player1.x = Player1.x + tileSize + marginSize;
+					p1hasmovedd = true;
+				}
 			}
 		}
 		else {
 			if (i == 0) { 
-				if (doublew2)
+				if (doublew2) {
 					Player2.y = Player2.y - tileSize - marginSize- tileSize - marginSize;
-				else
+					p2hasmoveddoublew = true;
+				}
+				else {
 					Player2.y = Player2.y - tileSize - marginSize;
+					p2hasmovedw = true;
+				}
 			} else if (i == 1) {
-				if (doublea2)
+				if (doublea2) {
 					Player2.x = Player2.x - tileSize - marginSize - tileSize - marginSize;
-				else
+					p2hasmoveddoublea = true;
+				}
+				else {
 					Player2.x = Player2.x - tileSize - marginSize;
+					p2hasmoveda = true;
+				}
 			} else if (i == 2) {
-				if (doubles2)
+				if (doubles2) {
 					Player2.y = Player2.y + tileSize + marginSize + tileSize + marginSize;
-				else
+					p2hasmoveddoubles = true;
+				}
+				else {
 					Player2.y = Player2.y + tileSize + marginSize;
+					p2hasmoveds = true;
+				}
 			} else if (i == 3) {
-				if (doubled2)
+				if (doubled2) {
 					Player2.x = Player2.x + tileSize + marginSize + tileSize + marginSize;
-				else
+					p2hasmoveddoubled = true;
+				}
+				else {
 					Player2.x = Player2.x + tileSize + marginSize;
+					p2hasmovedd = true;
+				}
 			}
-		}	
-
-		turn.switchPlayer();
+			
+		}
+		if (p1hasmovedw || p1hasmoveda || p1hasmoveds || p1hasmovedd || p1hasmoveddoublew || p1hasmoveddoublea || p1hasmoveddoubles || p1hasmoveddoubled) {
+			mml.p1hasmovedtoggle = true;
+			p1toggleactivitypane = true;
+			
+		}
+		if (p2hasmovedw || p2hasmoveda || p2hasmoveds || p2hasmovedd || p2hasmoveddoublew || p2hasmoveddoublea || p2hasmoveddoubles || p2hasmoveddoubled) {
+			mml.p2hasmovedtoggle = true;
+			p2toggleactivitypane = true;
+			
+		}
+		
 		repaint();
+		
 	}
+	
+	
+	
+	
 
 	public void paint(Graphics g) {
 		if (rescale)
@@ -230,9 +307,116 @@ public class Game extends JPanel {
 				Player2.first = false;
 			}
 			
+			
+			
 			if (lastClickedGame =="side1" || lastClickedGame =="side2") { // call wall grid
 				wall.walltoggle++;
 			}
+			
+			
+	// player 1 turns
+			if (lastClickedGame =="p1cancel" && p1hasmovedw == true) {
+				Player1.y = Player1.y + tileSize + marginSize; 			
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveda == true) {
+				Player1.x = Player1.x + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveds == true) {
+				Player1.y = Player1.y - tileSize - marginSize; 		
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmovedd == true) {
+				Player1.x = Player1.x - tileSize - marginSize;
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveddoublew == true) {
+				Player1.y = Player1.y + tileSize + marginSize + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveddoublea == true) {
+				Player1.x = Player1.x + tileSize + marginSize + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveddoubles == true) {
+				Player1.y = Player1.y - tileSize - marginSize- tileSize - marginSize; 		
+			}
+			if (lastClickedGame =="p1cancel" && p1hasmoveddoubled == true) {
+				Player1.x = Player1.x - tileSize - marginSize - tileSize - marginSize;
+			}
+			
+			// player 2 turns
+			if (lastClickedGame =="p2cancel" && p2hasmovedw == true) {
+				Player2.y = Player2.y + tileSize + marginSize; 			
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveda == true) {
+				Player2.x = Player2.x + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveds == true) {
+				Player2.y = Player2.y - tileSize - marginSize; 		
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmovedd == true) {
+				Player2.x = Player2.x - tileSize - marginSize;
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveddoublew == true) {
+				Player2.y = Player2.y + tileSize + marginSize + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveddoublea == true) {
+				Player2.x = Player2.x + tileSize + marginSize + tileSize + marginSize;			
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveddoubles == true) {
+				Player2.y = Player2.y - tileSize - marginSize- tileSize - marginSize; 		
+			}
+			if (lastClickedGame =="p2cancel" && p2hasmoveddoubled == true) {
+				Player2.x = Player2.x - tileSize - marginSize - tileSize - marginSize;
+			}
+				
+			
+	//switchplayer
+			if (lastClickedGame =="p1confirm" || lastClickedGame =="p2confirm") {
+				turn.switchPlayer();
+				
+				p1hasmovedw = false;
+				p1hasmoveda = false;
+				p1hasmoveds = false;
+				p1hasmovedd = false;
+				p2hasmovedw = false;
+				p2hasmoveda = false;
+				p2hasmoveds = false;
+				p2hasmovedd = false;
+				p1hasmoveddoublew = false;
+				p1hasmoveddoublea = false;
+				p1hasmoveddoubles = false;
+				p1hasmoveddoubled = false;
+				p2hasmoveddoublew = false;
+				p2hasmoveddoublea = false;
+				p2hasmoveddoubles = false;
+				p2hasmoveddoubled = false;
+				
+				mml.p1hasmovedtoggle = false;
+				mml.p2hasmovedtoggle = false;
+				p1toggleactivitypane = false;
+				p2toggleactivitypane = false;
+			}
+			if (lastClickedGame =="p1cancel" || lastClickedGame =="p2cancel") {
+				p1hasmovedw = false;
+				p1hasmoveda = false;
+				p1hasmoveds = false;
+				p1hasmovedd = false;
+				p2hasmovedw = false;
+				p2hasmoveda = false;
+				p2hasmoveds = false;
+				p2hasmovedd = false;
+				p1hasmoveddoublew = false;
+				p1hasmoveddoublea = false;
+				p1hasmoveddoubles = false;
+				p1hasmoveddoubled = false;
+				p2hasmoveddoublew = false;
+				p2hasmoveddoublea = false;
+				p2hasmoveddoubles = false;
+				p2hasmoveddoubled = false;
+				
+				mml.p1hasmovedtoggle = false;
+				mml.p2hasmovedtoggle = false;
+				p1toggleactivitypane = false;
+				p2toggleactivitypane = false;
+			}
+			
 			
 			lastClickedGame = "";
 		}
@@ -319,6 +503,21 @@ public class Game extends JPanel {
             g.fillRect(getWidth()-(int) Math.ceil(tileSize/2.6) - tileSize/2, getHeight()-x*tileSize/4-tileSize/4 - tileSize/8, tileSize/2, tileSize/8);
 		}
 		
+		//ACTIVITYPANES
+		
+		if (p1toggleactivitypane) {
+			g.setColor(Color.decode(confirm));
+			g2d.fillRect(0, 0, getWidth()/2, (getHeight()-getWidth())/2);
+			g.setColor(Color.decode(cancel));
+			g2d.fillRect(getWidth()/2, 0, getWidth()/2, (getHeight()-getWidth())/2); 
+		}
+		
+		if (p2toggleactivitypane) {
+			g.setColor(Color.decode(confirm));
+			g2d.fillRect(getWidth()/2, (getHeight()-getWidth())/2+ getWidth(), getWidth()/2, (getHeight()-getWidth())/2);
+			g.setColor(Color.decode(cancel));
+			g2d.fillRect(0, (getHeight()-getWidth())/2+ getWidth(), getWidth()/2, (getHeight()-getWidth())/2);
+		}
 		
         if (wall.walltoggle % 2 != 0) {
         	
@@ -413,6 +612,7 @@ public class Game extends JPanel {
 		int[] yPointsLeft2 = {Player2.y + 8,Player2.y + tileSize - 18, Player2.y + (tileSize-10)/2};	
 		
 		if (turn.onePlaysNext == true) { // shows possible directions of player 1
+			if (mml.p1hasmovedtoggle == false) {
 			if(Player1.i == 1) {
 				moves = new ArrayList<String>();
 				for (int j = 0; j < 4; j++)
@@ -498,8 +698,9 @@ public class Game extends JPanel {
 				wd1 = false;
 			}
 
-			
+			}	
 		} else { //Player 2's possible directions
+			if (mml.p2hasmovedtoggle == false) {
 			if (Player2.i != 1) {
 				g2d.setColor(Color.decode(highlightcolor));
 				doublew2 = false;
@@ -581,7 +782,9 @@ public class Game extends JPanel {
 				ws2 = false;
 				wd2 = false;
 			}	
-		}		
+		}	
+			
+		}
 	}
 	
 
