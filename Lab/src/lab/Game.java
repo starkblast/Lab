@@ -11,7 +11,7 @@ package lab;
 import java.awt.BasicStroke;
 
 import java.awt.Color;
-
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -46,7 +46,7 @@ public class Game extends JPanel {
 	public String player1 = "#588C7E";
 	public String player2 = "#8C4646";
 	public String player1color = "#6677AA";
-	public String player2color = "#AA7766";
+	public String player2color = "#AA7766"; 
 	private String gridcolor = "#F2AE72";
 	private String gridbackgroundcolor ="#D96479";
 	private String highlightcolor ="#F2E394";
@@ -110,8 +110,11 @@ public class Game extends JPanel {
 	
 	public boolean p1toggleactivitypane = false;
 	public boolean p2toggleactivitypane = false;
-
+	public boolean instructions = false;
 	
+//	public static boolean titlescreen;
+
+	public boolean titlescreen = mml.titlescreen;
 	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
 	public ArrayList<ArrayList<Integer>> walls2 = new ArrayList<ArrayList<Integer>>();
 
@@ -298,6 +301,10 @@ public class Game extends JPanel {
 	
 
 	public void paint(Graphics g) {
+		System.out.println("paint");
+		if (titlescreen == false){
+			repaint();
+		
 		if (rescale)
 			Rescale();
 		
@@ -524,6 +531,7 @@ public class Game extends JPanel {
 		
 		//ACTIVITYPANES
 		
+		
 		if (p1toggleactivitypane) {
 			g.setColor(Color.decode(confirm));
 			g2d.fillRect(0, 0, getWidth()/2, (getHeight()-getWidth())/2);
@@ -656,6 +664,8 @@ public class Game extends JPanel {
 		
 		int[] xPointsLeft2 = {Player2.x - 8 - tileSize/10 - marginSize,Player2.x - 8 - tileSize/10 - marginSize ,Player2.x - 8 - marginSize - (tileSize-10)/2}; //triangle
 		int[] yPointsLeft2 = {Player2.y + 8,Player2.y + tileSize - 18, Player2.y + (tileSize-10)/2};	
+		
+		
 		
 		if (turn.onePlaysNext == true) { // shows possible directions of player 1
 			if (mml.p1hasmovedtoggle == false) {
@@ -827,13 +837,59 @@ public class Game extends JPanel {
 				wa2 = false;
 				ws2 = false;
 				wd2 = false;
+				
+				
 			}	
 		}	
 			
 		}
+		
+	}
+		else {
+			Graphics2D g2d = (Graphics2D) g;		
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+			RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			
+			int[] xPointsTitle = {getWidth()/9*3 +getWidth()/18,getWidth()/9*3 +getWidth()/18, getWidth()/18*12 +getWidth()/18}; //triangle
+			int[] yPointsTitle = {(getHeight()-getWidth())/2+getWidth()/9*2, (getHeight()-getWidth())/2+getWidth()/9*5,(getHeight()-getWidth())/2+getWidth()/18*7} ;	
+			
+			if (instructions == true) {
+				g.setColor(Color.decode(gridcolor));
+				g2d.fillRect(0,0,getWidth(),getHeight());
+				g.setColor(Color.decode(wall.wallmarkercolor)); 
+				g.setFont(new Font("Calibri", Font.PLAIN, getWidth()/18)); 
+				g2d.drawString("Instructions",getWidth()/9, (getHeight()-getWidth())/2);
+				g.setFont(new Font("Calibri", Font.PLAIN, getWidth()/20)); 
+				g2d.drawString("Objective: Reach the opponent's",getWidth()/9, (getHeight()-getWidth())/2 + getWidth()/9);
+				g2d.drawString("base line first.",getWidth()/9, (getHeight()-getWidth())/2 + 2*getWidth()/11);
+				g2d.drawString("Turn: On his/her turn, the player",getWidth()/9, (getHeight()-getWidth())/2 + 2*getWidth()/11 + getWidth()/9);
+				g2d.drawString("can either place a wall or move",getWidth()/9, (getHeight()-getWidth())/2 + 4*getWidth()/11);
+				g2d.drawString("in a direction. Walls cannot be",getWidth()/9, (getHeight()-getWidth())/2 + 5*getWidth()/11);
+				g2d.drawString("crossed unless you jump over",getWidth()/9, (getHeight()-getWidth())/2 + 6*getWidth()/11);
+				g2d.drawString("the other player.",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11);
+				g2d.drawString("Walls can be built by pressing",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11 + getWidth()/9);
+				g2d.drawString("on the player's side and",getWidth()/9, (getHeight()-getWidth())/2 + 8*getWidth()/11 + getWidth()/9);
+				g2d.drawString("connecting the dots.",getWidth()/9, (getHeight()-getWidth())/2 + 9*getWidth()/11 + getWidth()/9);
+				
+			}	else {
+				
+				g.setColor(Color.decode(gridcolor));
+				g2d.fillRect(0,0,getWidth(),getHeight());
+				g.setColor(Color.decode(player2));
+				g2d.fillOval(getWidth()/9, (getHeight()-getWidth())/2, getWidth()/9*7, getWidth()/9*7);
+				//g2d.fillOval(getWidth()/9*3, (getHeight()-getWidth())/2+getWidth()/9*5 + getWidth()/3 - getWidth()/36, getWidth()/9*3, getWidth()/9*3);
+				g.setColor(Color.decode(highlightcolor));
+				g2d.fillPolygon(xPointsTitle, yPointsTitle, 3);
+				g.setFont(new Font("Calibri", Font.PLAIN, getWidth()/9)); 
+				g.setColor(Color.decode(player1color));  
+				g2d.drawString("?",getWidth()/36*17 , (getHeight()-getWidth())/2+getWidth()/9*5 + getWidth()/2);
+				//getWidth()/9*3,(getHeight()-getWidth())/2+getWidth()/9*2,getWidth()/9*3, (getHeight()-getWidth())/2+getWidth()/9*6, getWidth()/9*6,(getHeight()-getWidth())/2+getWidth()/18*7 
+			}
+		}
 	}
 	
-
+	
 	
 	public static void main(String[] args) throws InterruptedException {
 		// stuff that makes the game appear and do stuff
@@ -862,6 +918,8 @@ public class Game extends JPanel {
 		while (true) {
 			// checks for new clicks
 			game.repaint();
+			
+			System.out.println(mml.titlescreen);
 			if (mml.lastclicked != "") {
 				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
@@ -873,8 +931,13 @@ public class Game extends JPanel {
 			if (mml2.pointEnd != null) {
 				pointEnd = mml2.pointEnd;
 			}
+			
+//			if (titlescreen == false) {
+//				super.paint();
+//			}
 			// sleeps
 			Thread.sleep(10);
+			
 		}
 	
 		

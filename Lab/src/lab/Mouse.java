@@ -32,6 +32,7 @@ class Mouse implements MouseListener {
 	public boolean p2hasmovedtoggle = false;
 	public boolean p1walltoggle = false;
 	public boolean p2walltoggle = false;
+	public boolean titlescreen = true;
 	
 	public void getPlayerPosition(int x1, int y1, int x2, int y2, int width, int height) {
 		this.x1 = x1;
@@ -44,10 +45,11 @@ class Mouse implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) { 
-
-		int x = arg0.getX();
-		int y = arg0.getY();
 		
+			int x = arg0.getX();
+		int y = arg0.getY();
+		if (titlescreen == false) {
+			System.out.println(lastclicked);
 		
 		
 		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {   //player1 location
@@ -96,8 +98,15 @@ class Mouse implements MouseListener {
 			}
 		} 
 		
-			
-	
+		}	
+		
+		else {
+			System.out.println("töötab?");
+			if (x > width/9/* && y > (height - width)/2 && y < (height - width)/2 + width/9*7 && x < width - width/9*/) {
+				titlescreen = false;
+				System.out.println("töötab2");
+			}
+		}
 		
 	}
 	@Override
@@ -112,6 +121,8 @@ class Mouse implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent arg0) { // checks if wall-grid-markers are clicked or at least almost clicked
 		//Start = arg0.getPoint();
+		if (!titlescreen) {
+			if (width!= 0 && height != 0) {
 		int x = arg0.getX();
 		int y = arg0.getY();
 		int tileSize =(int) Math.ceil(width / 9.45);
@@ -123,10 +134,12 @@ class Mouse implements MouseListener {
 				Start = new Point(tile_x, tile_y);
 				//Start = new Point(tile_x * (tileSize+marginSize)-2, tile_y*(tileSize+marginSize)+((height-width)/2)-2);
 		}
+			}
 		else 
 			Start = null; 
 	}
 	
+	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		Start = null;
