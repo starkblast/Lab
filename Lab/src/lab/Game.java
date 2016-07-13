@@ -60,6 +60,9 @@ public class Game extends JPanel {
 	public int highlightups2;
 	public int highlightupd2;
 	
+	
+	
+	
 	//variables to check whether world ends after double jump
 	public boolean highdw1 = false, highda1 = false, highds1 = false, highdd1 = false,
 			
