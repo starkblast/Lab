@@ -3,6 +3,10 @@ package lab;
 // here be dragons but don't worry
 // everything is going to be fine
 // you just need to believe
+// if (believe) 
+//	  clapHands();
+// else
+// 	  believe = true;
 
 import java.awt.BasicStroke;
 
@@ -79,6 +83,7 @@ public class Game extends JPanel {
 	
 	//booleans for if players have moved in a direction
 	public boolean hasmoved = false;
+	public boolean hasWall = false;
 	
 	public boolean p1hasmovedw = false;
 	public boolean p1hasmoveda = false;
@@ -315,6 +320,7 @@ public class Game extends JPanel {
 			
 			
 	// player 1 turns
+			
 			if (lastClickedGame =="p1cancel" && p1hasmovedw == true) {
 				Player1.y = Player1.y + tileSize + marginSize; 			
 			}
@@ -365,12 +371,28 @@ public class Game extends JPanel {
 			if (lastClickedGame =="p2cancel" && p2hasmoveddoubled == true) {
 				Player2.x = Player2.x - tileSize - marginSize - tileSize - marginSize;
 			}
+			if ((lastClickedGame =="p1cancel" || lastClickedGame == "p2cancel") && hasWall == true) {
+				if (turn.onePlaysNext) {
+					walls1.remove(walls1.size() - 1);
+					hasWall = false;
+					mml.p1walltoggle = false;
+				}
+				else {
+					walls2.remove(walls2.size() - 1);
+					hasWall = false;
+					mml.p2walltoggle = false;
+				}
+
+			}
+			//if {lastClickedGame =="p2cancel" &&
 				
 			
 	//switchplayer
 			if (lastClickedGame =="p1confirm" || lastClickedGame =="p2confirm") {
 				turn.switchPlayer();
-				
+				if (wall.walltoggle % 2 != 0)
+					wall.walltoggle++;
+
 				p1hasmovedw = false;
 				p1hasmoveda = false;
 				p1hasmoveds = false;
@@ -390,10 +412,13 @@ public class Game extends JPanel {
 				
 				mml.p1hasmovedtoggle = false;
 				mml.p2hasmovedtoggle = false;
+				mml.p1walltoggle = false;
+				mml.p2walltoggle = false;
 				p1toggleactivitypane = false;
 				p2toggleactivitypane = false;
 			}
 			if (lastClickedGame =="p1cancel" || lastClickedGame =="p2cancel") {
+				
 				p1hasmovedw = false;
 				p1hasmoveda = false;
 				p1hasmoveds = false;
@@ -413,6 +438,8 @@ public class Game extends JPanel {
 				
 				mml.p1hasmovedtoggle = false;
 				mml.p2hasmovedtoggle = false;
+				mml.p1walltoggle = false;
+				mml.p2walltoggle = false;
 				p1toggleactivitypane = false;
 				p2toggleactivitypane = false;
 			}
@@ -491,17 +518,6 @@ public class Game extends JPanel {
 			g.drawLine(walls2.get(x).get(0)* (tileSize+marginSize)-1, walls2.get(x).get(1)*(tileSize+marginSize)+((getHeight()-getWidth())/2)-3, walls2.get(x).get(2)*(tileSize+marginSize)-1, walls2.get(x).get(3)*(tileSize+marginSize)+(getHeight()-getWidth())/2-3);
 			
 		}
-		// draw things that show how many walls are left
-		for (int x = 0; x < 10-walls1.size(); x++) {
-			g.setColor(Color.decode(wall.wallmarkercolor));
-            g2d.setStroke(new BasicStroke(tileSize/15));
-            g.fillRect((int) Math.ceil(tileSize/2.6), x*tileSize/4+tileSize/4, tileSize/2, tileSize/8);
-		}
-		for (int x = 0; x < 10-walls2.size(); x++) {
-			g.setColor(Color.decode(wall.wallmarkercolor));
-            g2d.setStroke(new BasicStroke(tileSize/15));
-            g.fillRect(getWidth()-(int) Math.ceil(tileSize/2.6) - tileSize/2, getHeight()-x*tileSize/4-tileSize/4 - tileSize/8, tileSize/2, tileSize/8);
-		}
 		
 		//ACTIVITYPANES
 		
@@ -518,9 +534,21 @@ public class Game extends JPanel {
 			g.setColor(Color.decode(cancel));
 			g2d.fillRect(0, (getHeight()-getWidth())/2+ getWidth(), getWidth()/2, (getHeight()-getWidth())/2);
 		}
+
+		// draw things that show how many walls are left
+		for (int x = 0; x < 10-walls1.size(); x++) {
+			g.setColor(Color.decode(wall.wallmarkercolor));
+            g2d.setStroke(new BasicStroke(tileSize/15));
+            g.fillRect((int) Math.ceil(tileSize/2.6), x*tileSize/4+tileSize/4, tileSize/2, tileSize/8);
+		}
+		for (int x = 0; x < 10-walls2.size(); x++) {
+			g.setColor(Color.decode(wall.wallmarkercolor));
+            g2d.setStroke(new BasicStroke(tileSize/15));
+            g.fillRect(getWidth()-(int) Math.ceil(tileSize/2.6) - tileSize/2, getHeight()-x*tileSize/4-tileSize/4 - tileSize/8, tileSize/2, tileSize/8);
+		}
 		
         if (wall.walltoggle % 2 != 0) {
-        	
+        	if (!hasWall) {
 			if (pointStart != null) {
 				
 				if ((turn.onePlaysNext && walls1.size() < 10) || (!turn.onePlaysNext && walls2.size() < 10)) {
@@ -545,13 +573,15 @@ public class Game extends JPanel {
 		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
 		            		else
 		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y + 2)));
-		            	}
+		            		hasWall = true;
+	            		}
 	            	} else {
 	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2))))) {
 		            		if (turn.onePlaysNext)
 		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
 		            		else
 		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x, pointStart.y - 2)));
+		            		hasWall = true;
 	            		}
 	            	}
 	            	mml.Start = null;
@@ -563,6 +593,7 @@ public class Game extends JPanel {
 		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
 		            		else
 		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x + 2, pointStart.y)));
+		            		hasWall = true;
 	            		}
 	            	} else {
 	            		if(!allCenters.contains(wallCenter(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y))))) {
@@ -571,11 +602,23 @@ public class Game extends JPanel {
 		            			walls1.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
 		            		else
 		            			walls2.add(new ArrayList<Integer>(Arrays.asList(pointStart.x, pointStart.y, pointStart.x - 2, pointStart.y)));
-		            	}
+		            		hasWall = true;
+	            		}
+	            		
 	            	}
 	            	mml.Start = null; // stop drawing
 	            	pointStart = null;
+	            	
+	            	
 	            }
+	            	if (turn.onePlaysNext) {
+	            		p1toggleactivitypane = true;
+	            		mml.p1walltoggle = true;
+	            	} else {
+	            		p2toggleactivitypane = true;
+	            		mml.p2walltoggle = true;
+	            	}
+				}
 				}
 				}
 	        }
