@@ -62,6 +62,9 @@ public class Player {
 			if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8 - game.tileSize - game.marginSize) {
 				game.highds1 = true;
 			}
+			System.out.println("walz" + WALLS);
+			System.out.println(new ArrayList<Integer>(Arrays.asList(player_x, player_y-1, player_x+1, player_y-1)));
+			//System.out.println(new ArrayList<Integer>(Arrays.asList(player_x, player_y, player_x, player_y-1)));
 			// checks if player is next to walls
 			if (WALLS.contains(new ArrayList<Integer>(Arrays.asList(player_x, player_y-1, player_x, player_y))) || WALLS.contains(new ArrayList<Integer>(Arrays.asList(player_x, player_y, player_x, player_y-1)))) {
 				game.wa1 = true;
