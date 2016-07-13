@@ -83,6 +83,7 @@ public class Game extends JPanel {
 	// variables that check presence of walls
 	public boolean ww1 = false, wa1 = false, ws1 = false, wd1 = false,
 		  	   	   ww2 = false, wa2 = false, ws2 = false, wd2 = false; 
+	private static boolean bringjesus2lyf = false;
 	
 	//booleans for if players have moved in a direction
 	public boolean hasmoved = false;
@@ -113,13 +114,6 @@ public class Game extends JPanel {
 	public boolean instructions = false;
 	
 //	public static boolean titlescreen;
-
-	public boolean titlescreen = mml.titlescreen;
-	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
-	public ArrayList<ArrayList<Integer>> walls2 = new ArrayList<ArrayList<Integer>>();
-
-	public static JFrame frame;
-	
 	Player Player1 = new Player(this, 1);  //classid
 	Player Player2 = new Player(this, 2);
 	Turn turn = new Turn(this);
@@ -127,11 +121,22 @@ public class Game extends JPanel {
 	static Mouse mml = new Mouse();
 	static MotionMouse mml2 = new MotionMouse();
 
+	public static boolean titlescreen = mml.titlescreen;
+	public ArrayList<ArrayList<Integer>> walls1 = new ArrayList<ArrayList<Integer>>();
+	public ArrayList<ArrayList<Integer>> walls2 = new ArrayList<ArrayList<Integer>>();
+
+	public static JFrame frame;
+	
+
 
 	/*public Rectangle getBounds() { // collider
 		return new Rectangle(0, 0, getWidth(), (getHeight()-getWidth())/2);
 	}*/ 
 	private static boolean rescale = false;
+	
+	private void reset() {
+		
+	}
 	
 	private ArrayList<Integer> wallCenter(ArrayList<Integer> wall) {
 		if (wall.get(0) == wall.get(2)) {
@@ -299,15 +304,18 @@ public class Game extends JPanel {
 	
 
 	public void paint(Graphics g) {
-		System.out.println("paint");
-		if (titlescreen == false){
-			repaint();
-		
+		repaint();
+		mml.width = getWidth();
+		mml.height = getHeight();
+
 		if (rescale)
 			Rescale();
-		if (!hasmoved) {
-			//System.out.println(moves);
+		if (lastClickedGame == "instructions") {
+			instructions = true;
 		}
+		if (mml.titlescreen == false){
+			repaint();
+		
 		if (lastClickedGame != "") { // handles clicks
 			if (moves.contains(lastClickedGame)) { // if move player attempted is available
 				for (int i = 0; i < 4; i++) {
@@ -317,7 +325,7 @@ public class Game extends JPanel {
 				    }
 				}
 			}
-			if (lastClickedGame != "" && lastClickedGame != null) { // stops placing players in default locations
+			if (lastClickedGame != "" && lastClickedGame != null && mml.p1hasmovedtoggle) { // stops placing players in default locations
 				Player1.first = false;
 				Player2.first = false;
 			}
@@ -455,16 +463,23 @@ public class Game extends JPanel {
 			lastClickedGame = "";
 		}
 		// win condition
+
 		if (!Player2.first) {
 			if (Player2.y <= (getHeight()-getWidth())/2 + tileSize/8) {
 				player1 = "#8C4646";
 				gameOver = true;
+				mml.gameover = true;
+				g.drawString("game over!", getWidth()/36*14, getHeight()/2);
+				bringjesus2lyf = true;
 			}
 		}
 		if (!Player1.first) {
 			if (Player1.y >= ((getHeight()-getWidth())/2 + getWidth()) - tileSize + tileSize/8) {
 				player2 = "#588C7E";
 				gameOver = true;
+				mml.gameover = true;
+				g.drawString("game over!", getWidth()/36*14, getHeight()/2);
+				bringjesus2lyf = true;
 			}
 		}
 		tileSize =  (int) Math.ceil(getWidth() / 9.45);
@@ -871,10 +886,12 @@ public class Game extends JPanel {
 				g2d.drawString("the other player.",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11);
 				g2d.drawString("Walls can be built by pressing",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11 + getWidth()/9);
 				g2d.drawString("on the player's side and",getWidth()/9, (getHeight()-getWidth())/2 + 8*getWidth()/11 + getWidth()/9);
-				g2d.drawString("connecting the dots..",getWidth()/9, (getHeight()-getWidth())/2 + 9*getWidth()/11 + getWidth()/9);
-				
+				g2d.drawString("connecting the dots.",getWidth()/9, (getHeight()-getWidth())/2 + 9*getWidth()/11 + getWidth()/9);
+
+				//g2d.fillPolygon(xPointsTitle, yPointsTitle, 3);
+				g2d.drawString("play", getWidth()/36*16, ((getHeight()-getWidth())/2+getWidth()/9*5 + getWidth()/2)+15);
 			}	else {
-				
+				reset();
 				g.setColor(Color.decode(gridcolor));
 				g2d.fillRect(0,0,getWidth(),getHeight());
 				g.setColor(Color.decode(player2));
@@ -896,6 +913,7 @@ public class Game extends JPanel {
 		// stuff that makes the game appear and do stuff
 		frame = new JFrame("Labyrinth cancer game");
 		frame.getContentPane().addMouseListener(mml);
+		
 		frame.getContentPane().add(new Game());
 		frame.getContentPane().addMouseMotionListener(mml2);
 		Game game = new Game();
@@ -919,23 +937,24 @@ public class Game extends JPanel {
 		while (true) {
 			// checks for new clicks
 			game.repaint();
-			
-			System.out.println(mml.titlescreen);
+			if (mml.lastclicked != "")
+				System.out.println(mml.lastclicked);
+			if (mml.lastclicked == "title") {
+				mml.titlescreen = false;
+			}
+			// brings game back to life like jesus!!!!!!!!!
+			else if (mml.lastclicked == "jesus" && bringjesus2lyf) {
+				mml.titlescreen = true; 
+				titlescreen = true; // resurrects game
+			}
 			if (mml.lastclicked != "") {
 				lastClickedGame = mml.lastclicked;
 				mml.lastclicked = "";
 			}
-			//if (mml.Start != null) {
-				pointStart = mml.Start;
-				//mml.Start = null;
-			//}
+			pointStart = mml.Start;
 			if (mml2.pointEnd != null) {
 				pointEnd = mml2.pointEnd;
 			}
-			
-//			if (titlescreen == false) {
-//				super.paint();
-//			}
 			// sleeps
 			Thread.sleep(10);
 			

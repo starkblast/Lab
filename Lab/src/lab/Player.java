@@ -34,17 +34,6 @@ public class Player {
 
 
 	public void paint(Graphics2D g) {
-		/*if(first) { // moves to default location
-			if (i == 1) {
-				y = ((game.getHeight()-game.getWidth())/2 + game.tileSize/8);
-				x = game.getWidth() /2 - (game.tileSize-10)/2;
-				
-			} else {
-				y = ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8;
-				x = game.getWidth() /2- (game.tileSize-10)/2;
-			}
-
-		}*/
 		ArrayList<ArrayList<Integer>> WALLS = game.calculateWalls();
 		int player_x = (int) Math.ceil(x / (game.tileSize+game.marginSize));
 		int player_y = (int) Math.ceil((y-((game.getHeight()-game.getWidth())/2)) / (game.tileSize+game.marginSize))+1;
@@ -62,9 +51,7 @@ public class Player {
 			if (y >= ((game.getHeight()-game.getWidth())/2 + game.getWidth()) - game.tileSize + game.tileSize/8 - game.tileSize - game.marginSize) {
 				game.highds1 = true;
 			}
-			System.out.println("walz" + WALLS);
-			System.out.println(new ArrayList<Integer>(Arrays.asList(player_x, player_y-1, player_x+1, player_y-1)));
-			//System.out.println(new ArrayList<Integer>(Arrays.asList(player_x, player_y, player_x, player_y-1)));
+
 			// checks if player is next to walls
 			if (WALLS.contains(new ArrayList<Integer>(Arrays.asList(player_x, player_y-1, player_x, player_y))) || WALLS.contains(new ArrayList<Integer>(Arrays.asList(player_x, player_y, player_x, player_y-1)))) {
 				game.wa1 = true;
@@ -108,8 +95,5 @@ public class Player {
 		} // fills oval (that's the player)
 		g.fillOval(x, y, game.tileSize-10, game.tileSize-10);
 	}
-	
-	/*public boolean collision() {
-		return getBounds().intersects(game.getBounds());*/
 		
 	}

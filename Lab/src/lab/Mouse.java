@@ -24,8 +24,8 @@ class Mouse implements MouseListener {
 	private int x2;
 	private int y1;
 	private int y2;
-	private int width;
-	private int height;
+	public int width;
+	public int height;
 	public String lastclicked;
 	public Point Start = null;
 	public boolean p1hasmovedtoggle = false;
@@ -33,6 +33,8 @@ class Mouse implements MouseListener {
 	public boolean p1walltoggle = false;
 	public boolean p2walltoggle = false;
 	public boolean titlescreen = true;
+	public boolean instructions = false;
+	public boolean gameover = false;
 	
 	public void getPlayerPosition(int x1, int y1, int x2, int y2, int width, int height) {
 		this.x1 = x1;
@@ -46,10 +48,13 @@ class Mouse implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent arg0) { 
 		
-			int x = arg0.getX();
+		int x = arg0.getX();
 		int y = arg0.getY();
 		if (titlescreen == false) {
-			System.out.println(lastclicked);
+			if (gameover && lastclicked != "p1confirm" &&  lastclicked != "p2confirm") {
+				lastclicked = "jesus";
+				titlescreen = true;
+			}
 		
 		
 		if (Math.abs(x - x1) < 20 && Math.abs(y - y1 ) < 20) {   //player1 location
@@ -101,10 +106,16 @@ class Mouse implements MouseListener {
 		}	
 		
 		else {
-			System.out.println("töötab?");
-			if (x > width/9/* && y > (height - width)/2 && y < (height - width)/2 + width/9*7 && x < width - width/9*/) {
-				titlescreen = false;
-				System.out.println("töötab2");
+			if (x > width/9 && y > (height - width)/2 && y < (height - width)/2 + width/9*7 && x < width - width/9) {
+				//titlescreen = false;
+				lastclicked = "title";
+			}
+			if (Math.abs(x - width/36*17) <= 25 && Math.abs(y-((height-width)/2+width/9*5 + width/2)) <= 25 && instructions == false) {
+				lastclicked = "instructions";
+				instructions = true;
+			}
+			else if (Math.abs(x - width/36*17) <= 25 && Math.abs(y-((height-width)/2+width/9*5 + width/2)+15) <= 25 && instructions == true) {
+				lastclicked = "title";
 			}
 		}
 		
