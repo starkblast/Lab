@@ -871,7 +871,7 @@ public class Game extends JPanel {
 				g2d.drawString("the other player.",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11);
 				g2d.drawString("Walls can be built by pressing",getWidth()/9, (getHeight()-getWidth())/2 + 7*getWidth()/11 + getWidth()/9);
 				g2d.drawString("on the player's side and",getWidth()/9, (getHeight()-getWidth())/2 + 8*getWidth()/11 + getWidth()/9);
-				g2d.drawString("connecting the dots.",getWidth()/9, (getHeight()-getWidth())/2 + 9*getWidth()/11 + getWidth()/9);
+				g2d.drawString("connecting the dots..",getWidth()/9, (getHeight()-getWidth())/2 + 9*getWidth()/11 + getWidth()/9);
 				
 			}	else {
 				
